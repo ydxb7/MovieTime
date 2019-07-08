@@ -2,17 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
-    <!--<data>-->
-        <!--<variable-->
-                <!--name="property"-->
-                <!--type="com.example.android.marsrealestate.network.MarsProperty" />-->
-    <!--</data>-->
+    <data>
+        <variable
+                name="movie"
+                type="ai.tomorrow.movietime.network.MovieProperty" />
+    </data>
     <ImageView
-            android:id="@+id/movies_post"
+            android:id="@+id/movies_poster"
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:padding="2dp"
+            app:imageUrl="@{movie.posterPath}"
             tools:src="@tools:sample/backgrounds/scenic"/>
 </layout>

@@ -19,8 +19,11 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField 'String', "ApiKey", MyAwesomeApp_ApiKey
-            resValue 'string', "api_key", MyAwesomeApp_ApiKey
+            buildConfigField 'String', "MovieDb_ApiKey", MovieDb_ApiKey
+            resValue 'string', "moviedb_apikey", MovieDb_ApiKey
+
+            buildConfigField 'String', "Youtube_ApiKey", Youtube_ApiKey
+            resValue 'string', "youtube_apikey", Youtube_ApiKey
         }
         release {
             minifyEnabled false

@@ -20,7 +20,7 @@
                 android:padding="16dp">
 
             <ImageView
-                    android:id="@+id/moive_post"
+                    android:id="@+id/moive_poster"
                     android:layout_width="0dp"
                     android:layout_height="266dp"
                     android:scaleType="centerCrop"
@@ -37,7 +37,7 @@
                     android:textColor="#de000000"
                     android:textSize="39sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/moive_post"
+                    app:layout_constraintTop_toBottomOf="@+id/moive_poster"
                     tools:text="Movie Name" />
 
             <TextView
