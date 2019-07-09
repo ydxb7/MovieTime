@@ -20,10 +20,14 @@ data class MovieProperty(
     val title: String,
     val popularity: Double,
     @Json(name = "poster_path") val _posterPath: String,
+    @Json(name = "backdrop_path") val _backdropPath: String,
     @Json(name = "original_language") val originalLanguage: String,
     val overview: String,
     @Json(name = "release_date") val releaseDate: String
 ) : Parcelable {
     val posterPath: String
         get() = _posterPath.substring(1)
+
+    val backdropPath: String
+        get() = _backdropPath.substring(1)
 }

@@ -21,14 +21,14 @@
 
             <ImageView
                     android:id="@+id/moive_poster"
-                    android:layout_width="0dp"
-                    android:layout_height="266dp"
-                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@tools:sample/backgrounds/scenic"
-                    app:imageUrl="@{viewModel.selectedMovie.posterPath}" />
+                    app:imageUrl="@{viewModel.selectedMovie.backdropPath}" />
 
             <TextView
                     android:id="@+id/moive_name_text"

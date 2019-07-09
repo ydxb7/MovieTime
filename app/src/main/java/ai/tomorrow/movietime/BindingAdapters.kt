@@ -10,6 +10,7 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 
 const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
@@ -37,6 +38,7 @@ fun bindImage(imgView: ImageView, posterPath: String?) {
             RequestOptions()
                 .placeholder(R.drawable.loading_animation)
                 .error(R.drawable.ic_broken_image)
+                .transforms(RoundedCorners(20))
         )
         .into(imgView)
 
