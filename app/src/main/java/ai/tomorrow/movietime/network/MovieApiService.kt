@@ -2,16 +2,12 @@ package ai.tomorrow.movietime.network
 
 import ai.tomorrow.movietime.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Query
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 private val MOVIE_LIST_URL = "https://api.themoviedb.org/3/discover/"
@@ -25,9 +21,6 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
-//val moshi: Moshi = Moshi.Builder().build()
-//val adapter: JsonAdapter<MovieProperty> = moshi.adapter(MovieProperty::class.java)
-
 /**
  * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
  * object.
@@ -37,9 +30,6 @@ private val retrofit = Retrofit.Builder()
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .baseUrl(MOVIE_LIST_URL)
     .build()
-//    .addConverterFactory(ScalarsConverterFactory.create())
-//    .baseUrl(MOVIE_LIST_URL)
-//    .build()
 
 
 /**
@@ -53,12 +43,9 @@ interface MovieApiService {
      * endpoint will be requested with the GET HTTP method
      */
     @GET("movie?api_key=$movieDb_ApiKey&primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22")
-//    @GET("realestate")
     fun getProperties():
-            Deferred<MoviePage>
-//            Call<String>
     // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
-//            Deferred<String>
+            Deferred<MoviePage>
 }
 
 /**

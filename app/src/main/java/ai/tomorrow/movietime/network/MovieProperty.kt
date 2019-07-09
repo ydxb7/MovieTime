@@ -1,8 +1,6 @@
 package ai.tomorrow.movietime.network
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import retrofit2.http.GET
 
 
 data class MoviePage(

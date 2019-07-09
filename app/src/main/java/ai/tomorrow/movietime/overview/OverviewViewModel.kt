@@ -10,9 +10,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 enum class MovieApiStatus { LOADING, ERROR, DONE }
 
@@ -67,18 +64,14 @@ class OverviewViewModel : ViewModel() {
             var getPropertiesDeferred = MovieApi.retrofitService.getProperties()
 
             try {
-
-                Log.i("OverviewViewModel", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 _status.value = MovieApiStatus.LOADING
                 // this will run on a thread managed by Retrofit
                 val pageResult = getPropertiesDeferred.await()
-                Log.i("pageResult = ", "size = " + pageResult.results.size)
                 _status.value = MovieApiStatus.DONE
                 _properties.value = pageResult.results
             } catch (e: Exception) {
                 _status.value = MovieApiStatus.ERROR
                 _properties.value = ArrayList()
-                Log.i("OverviewViewModel", "error     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             }
         }
     }
