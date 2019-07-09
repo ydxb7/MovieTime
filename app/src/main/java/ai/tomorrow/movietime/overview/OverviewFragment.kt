@@ -41,18 +41,18 @@ class OverviewFragment : Fragment() {
         binding.postersGrid.adapter = MoviePosterGridAdapter(MoviePosterGridAdapter.OnClickListener {
             viewModel.displayPropertyDetails(it)
         })
-
-        // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
-        // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
-        // for another navigation event.
-        viewModel.navigateToSelectedMovie.observe(this, Observer {
-            if ( null != it ) {
-                // Must find the NavController from the Fragment
-                this.findNavController().navigate(OverviewFragmentDirections.actionOverviewFragmentToDetailFragment())
-                // Tell the ViewModel we've made the navigate call to prevent multiple navigation
-                viewModel.displayPropertyDetailsComplete()
-            }
-        })
+//
+//        // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
+//        // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
+//        // for another navigation event.
+//        viewModel.navigateToSelectedMovie.observe(this, Observer {
+//            if ( null != it ) {
+//                // Must find the NavController from the Fragment
+//                this.findNavController().navigate(OverviewFragmentDirections.actionOverviewFragmentToDetailFragment())
+//                // Tell the ViewModel we've made the navigate call to prevent multiple navigation
+//                viewModel.displayPropertyDetailsComplete()
+//            }
+//        })
 
         return binding.root
     }

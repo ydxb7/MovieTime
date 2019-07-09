@@ -30,7 +30,6 @@ class MoviePosterGridAdapter( val onClickListener: OnClickListener ) :
         }
     }
 
-
     /**
      * The MarsPropertyViewHolder constructor takes the binding variable from the associated
      * GridViewItem, which nicely gives it access to the full [MarsProperty] information.
@@ -63,12 +62,6 @@ class MoviePosterGridAdapter( val onClickListener: OnClickListener ) :
         }
         holder.bind(movieProperty)
     }
-
-
-
-
-
-
 
     /**
      * Custom listener that handles clicks on [RecyclerView] items.  Passes the [MovieProperty]

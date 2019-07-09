@@ -3,6 +3,7 @@ package ai.tomorrow.movietime
 import ai.tomorrow.movietime.network.MovieProperty
 import ai.tomorrow.movietime.overview.MovieApiStatus
 import ai.tomorrow.movietime.overview.MoviePosterGridAdapter
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
@@ -29,8 +30,9 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<MovieProperty>?) {
  */
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, posterPath: String?) {
+    Log.i("BindingAdapter", " posterPath = " + posterPath)
     val imgUri = IMAGE_BASE_URL.toUri().buildUpon().scheme("https").appendPath(posterPath).build()
-
+    Log.i("BindingAdapter", " imgUri = " + imgUri)
     Glide.with(imgView.context)
         .load(imgUri)
         .apply(
