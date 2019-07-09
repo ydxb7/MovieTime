@@ -14,5 +14,10 @@
 
     <fragment android:id="@+id/detailFragment"
               android:name="ai.tomorrow.movietime.detail.DetailFragment"
-              android:label="DetailFragment"/>
+              android:label="DetailFragment">
+        <argument
+                android:name="selectedMovie"
+                app:argType="ai.tomorrow.movietime.network.MovieProperty"
+        />
+    </fragment>
 </navigation>

@@ -1,6 +1,8 @@
 package ai.tomorrow.movietime.network
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
 
 data class MoviePage(
@@ -10,7 +12,7 @@ data class MoviePage(
     val results: List<MovieProperty>
 )
 
-
+@Parcelize
 data class MovieProperty(
     val id: Long,
     @Json(name = "vote_count") val voteCount: String,
@@ -21,7 +23,7 @@ data class MovieProperty(
     @Json(name = "original_language") val originalLanguage: String,
     val overview: String,
     @Json(name = "release_date") val releaseDate: String
-) {
+) : Parcelable {
     val posterPath: String
         get() = _posterPath.substring(1)
 }

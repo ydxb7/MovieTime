@@ -3,11 +3,11 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <!--<data>-->
-        <!--<variable-->
-                <!--name="viewModel"-->
-                <!--type="com.example.android.marsrealestate.detail.DetailViewModel" />-->
-    <!--</data>-->
+    <data>
+        <variable
+                name="viewModel"
+                type="ai.tomorrow.movietime.detail.DetailViewModel" />
+    </data>
 
     <ScrollView
             android:layout_width="match_parent"
@@ -27,7 +27,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/backgrounds/scenic" />
+                    tools:src="@tools:sample/backgrounds/scenic"
+                    app:imageUrl="@{viewModel.selectedMovie.posterPath}" />
 
             <TextView
                     android:id="@+id/moive_name_text"
@@ -38,7 +39,8 @@
                     android:textSize="39sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/moive_poster"
-                    tools:text="Movie Name" />
+                    tools:text="Movie Name"
+                    android:text="@{viewModel.selectedMovie.title}" />
 
             <TextView
                     android:id="@+id/movie_overview_text"
@@ -49,7 +51,8 @@
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/moive_name_text"
-                    tools:text="overview" />
+                    tools:text="overview"
+                    android:text="@{viewModel.selectedMovie.overview}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
