@@ -10,7 +10,10 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
 private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
+
 private val MOVIE_LIST_URL = "https://api.themoviedb.org/3/discover/"
+private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/245891/"
+
 private const val BASE_URL = "https://mars.udacity.com/"
 
 /**
@@ -25,7 +28,7 @@ private val moshi = Moshi.Builder()
  * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
  * object.
  */
-private val retrofit = Retrofit.Builder()
+private val retrofitMovie = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .baseUrl(MOVIE_LIST_URL)
@@ -52,5 +55,22 @@ interface MovieApiService {
  * A public Api object that exposes the lazy-initialized Retrofit service
  */
 object MovieApi {
-    val retrofitService: MovieApiService by lazy { retrofit.create(MovieApiService::class.java) }
+    val retrofitService: MovieApiService by lazy { retrofitMovie.create(MovieApiService::class.java) }
 }
+
+interface VideoApiService{
+    @GET("videos?api_key=$movieDb_ApiKey&language=en-US")
+    fun getVideoResults():
+            Deferred<VideoResult>
+}
+
+private val retrofitVideo = Retrofit.Builder()
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+    .baseUrl(VIDEO_RESULT_URL)
+    .build()
+
+object VideoApi{
+    val retrofitService: VideoApiService by lazy { retrofitVideo.create(VideoApiService::class.java) }
+}
+

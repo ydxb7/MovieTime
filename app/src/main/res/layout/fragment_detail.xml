@@ -19,16 +19,27 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-            <ImageView
-                    android:id="@+id/moive_poster"
+            <!-- YouTube Player -->
+            <fragment
+                    android:id="@+id/youtubeFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerInside"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/backgrounds/scenic"
-                    app:imageUrl="@{viewModel.selectedMovie.backdropPath}" />
+                    android:name="com.google.android.youtube.player.YouTubePlayerFragment">
+            </fragment>
+
+            <!--<ImageView-->
+                    <!--android:id="@+id/moive_poster"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toTopOf="parent"-->
+                    <!--tools:src="@tools:sample/backgrounds/scenic"-->
+                    <!--app:imageUrl="@{viewModel.selectedMovie.backdropPath}" />-->
 
             <TextView
                     android:id="@+id/moive_name_text"
@@ -38,7 +49,7 @@
                     android:textColor="#de000000"
                     android:textSize="39sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/moive_poster"
+                    app:layout_constraintTop_toBottomOf="@+id/youtubeFragment"
                     tools:text="Movie Name"
                     android:text="@{viewModel.selectedMovie.title}" />
 

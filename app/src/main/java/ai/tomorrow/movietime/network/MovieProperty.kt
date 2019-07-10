@@ -31,3 +31,19 @@ data class MovieProperty(
     val backdropPath: String
         get() = _backdropPath.substring(1)
 }
+
+
+data class Video(
+    @Json(name = "id") val videoId: String,
+    val key: String,
+    val name: String,
+    val site: String,
+    val size: Int,
+    val type: String
+)
+
+data class VideoResult(
+    @Json(name = "id") val movieId: Long,
+    val results: List<Video>
+)
+

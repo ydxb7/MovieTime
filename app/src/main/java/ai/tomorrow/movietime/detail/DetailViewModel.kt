@@ -1,8 +1,17 @@
 package ai.tomorrow.movietime.detail
 
+import ai.tomorrow.movietime.network.MovieApi
 import ai.tomorrow.movietime.network.MovieProperty
+import ai.tomorrow.movietime.network.Video
+import ai.tomorrow.movietime.network.VideoApi
+import ai.tomorrow.movietime.overview.MovieApiStatus
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 
 /**
@@ -20,6 +29,39 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) : AndroidV
     init {
         _selectedMovie.value = movieProperty
     }
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    var videos: List<Video> = ArrayList()
+
+    init {
+        getVideoResults()
+    }
+
+    private fun getVideoResults() {
+        coroutineScope.launch {
+            // Get the Deferred object for our Retrofit request
+            var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults()
+
+            try {
+                // this will run on a thread managed by Retrofit
+                val videoResults = getVideoResultsDeferred.await()
+                videos = videoResults.results
+                Log.i("DetailViewModel", "videos size = " + videos.size)
+
+            } catch (e: Exception) {
+                videos = ArrayList()
+                Log.i("DetailViewModel", "fetch video error")
+            }
+        }
+    }
+
+
+
 
 //    // The displayPropertyPrice formatted Transformation Map LiveData, which displays the sale
 //    // or rental price.
