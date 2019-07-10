@@ -1,13 +1,14 @@
 package ai.tomorrow.movietime.detail
 
-import ai.tomorrow.movietime.network.MovieApi
 import ai.tomorrow.movietime.network.MovieProperty
 import ai.tomorrow.movietime.network.Video
 import ai.tomorrow.movietime.network.VideoApi
-import ai.tomorrow.movietime.overview.MovieApiStatus
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

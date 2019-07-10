@@ -7,17 +7,14 @@
     <fragment android:id="@+id/overviewFragment"
               android:name="ai.tomorrow.movietime.overview.OverviewFragment"
               android:label="OverviewFragment">
-        <action android:id="@+id/action_overviewFragment_to_detailFragment"
-                app:destination="@id/detailFragment"
+        <action android:id="@+id/action_overviewFragment_to_detailActivity" app:destination="@id/detailActivity"
                 app:popUpTo="@+id/overviewFragment"/>
     </fragment>
 
-    <fragment android:id="@+id/detailFragment"
-              android:name="ai.tomorrow.movietime.detail.DetailFragment"
-              android:label="DetailFragment">
+    <activity android:id="@+id/detailActivity" android:name="ai.tomorrow.movietime.detail.DetailActivity"
+              android:label="DetailActivity">
         <argument
                 android:name="selectedMovie"
-                app:argType="ai.tomorrow.movietime.network.MovieProperty"
-        />
-    </fragment>
+                app:argType="ai.tomorrow.movietime.network.MovieProperty"/>
+    </activity>
 </navigation>
