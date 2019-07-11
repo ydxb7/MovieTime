@@ -1,10 +1,9 @@
 package ai.tomorrow.movietime.detail
 
 import ai.tomorrow.movietime.BuildConfig
-import ai.tomorrow.movietime.BuildConfig.Youtube_ApiKey
 import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentDetailBinding
-import android.app.AppComponentFactory
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,11 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.youtube.player.YouTubeInitializationResult
-import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerFragment
-import com.google.android.youtube.player.internal.c
 import kotlinx.android.synthetic.main.fragment_detail.*
+
 
 class DetailFragment : Fragment() {
     companion object{
@@ -26,7 +23,7 @@ class DetailFragment : Fragment() {
     }
 
     private val youTubePlayerFragment by lazy { (context as AppCompatActivity).fragmentManager
-        .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment }
+        .findFragmentById(ai.tomorrow.movietime.R.id.youtube_fragment) as YouTubePlayerFragment }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -40,10 +37,12 @@ class DetailFragment : Fragment() {
         binding.viewModel = viewModel
 
 //        viewModel.getVideoResults()
+        youTubePlayerFragment.setRetainInstance(true)
 
         viewModel.hasFinishGetResults.observe(this, Observer {
-            Log.i("DetailFragment", " viewModel.videos.size = " + viewModel.videos.size)
-            Log.i("DetailFragment", " hasFinishGetResults = " + it)
+
+//            Log.i("DetailFragment", " viewModel.videos.size = " + viewModel.videos.size)
+//            Log.i("DetailFragment", " hasFinishGetResults = " + it)
             if (it){
                 if (viewModel.videos.size > 0){
                     Log.i("DetailFragment", " youTubePlayerFragment.initialize  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" )
@@ -71,6 +70,31 @@ class DetailFragment : Fragment() {
 //        youTubePlayer = null
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        val currentOrientation = resources.configuration.orientation
+
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            val screenWidth = dpToPx(resources.configuration.screenWidthDp)
+            val videoWidth = screenWidth - screenWidth / 4 - resources.getDimension(R.dimen.videoPadding).toInt() * 2
+            setLayoutSize(youTubePlayerFragment.getView()!!, videoWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        } else {
+            setLayoutSize(youTubePlayerFragment.getView()!!,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
+    }
+
+    private fun setLayoutSize(view: View, width: Int, height: Int) {
+        val params = view.layoutParams
+        params.width = width
+        params.height = height
+        view.layoutParams = params
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density + 0.5f).toInt()
+    }
 
 }
 

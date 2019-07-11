@@ -65,7 +65,8 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
     fun getVideoResults() {
         coroutineScope.launch {
             // Get the Deferred object for our Retrofit request
-            var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(selectedMovie.value!!.id.toString(), MovieDb_ApiKey)
+            var getVideoResultsDeferred =
+                VideoApi.retrofitService.getVideoResults(selectedMovie.value!!.id.toString(), MovieDb_ApiKey)
 
             try {
                 // this will run on a thread managed by Retrofit
@@ -86,13 +87,16 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
         override fun onInitializationSuccess(
             provider: YouTubePlayer.Provider,
             youTubePlayer: YouTubePlayer,
-            b: Boolean
+            wasRestored: Boolean
         ) {
-            if (videos.size > 0){
-                youTubePlayer.cueVideo(videos[0].key)
-            } else {
-                youTubePlayer.cueVideo("V38cLTYYXNw")
-            }
+            Log.i("DetailViewModel", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  wasRestored = " + wasRestored )
+//            if (!wasRestored) {
+                if (videos.size > 0) {
+                    youTubePlayer.cueVideo(videos[0].key)
+                } else {
+                    youTubePlayer.cueVideo("V38cLTYYXNw")
+                }
+//            }
         }
 
         override fun onInitializationFailure(
@@ -103,7 +107,7 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
         }
     }
 
-    fun finishGetResult(){
+    fun finishGetResult() {
         _hasFinishGetResults.value = false
     }
 
