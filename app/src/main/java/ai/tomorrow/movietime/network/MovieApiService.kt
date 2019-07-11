@@ -13,12 +13,12 @@ import retrofit2.http.Query
 
 private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 
-private val MOVIE_LIST_URL = "https://api.themoviedb.org/3/discover/"
+private val MOVIE_LIST_URL = "https://api.themoviedb.org/3/"
 private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/"
 
 private const val BASE_URL = "https://mars.udacity.com/"
 
-enum class MovieApiSort(val value: String){SHOW_RENT("rent"), SHOW_BUY("buy"), SHOW_ALL("all")}
+enum class MovieApiSort(val value: String){SHOW_POPULARITY("popularity.desc"), SHOW_VOTE("vote_average.desc")}
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -49,8 +49,8 @@ interface MovieApiService {
      * The @GET annotation indicates that the "primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22"
      * endpoint will be requested with the GET HTTP method
      */
-    @GET("movie?api_key=$movieDb_ApiKey&primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22")
-    fun getProperties():
+    @GET("discover/movie")
+    fun getProperties(@Query("api_key") api_key: String, @Query("sort_by") sort_by: String):
     // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
             Deferred<MoviePage>
 }

@@ -70,7 +70,7 @@ class DetailFragment : Fragment() {
 //        youTubePlayer = null
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         val currentOrientation = resources.configuration.orientation
 

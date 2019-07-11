@@ -1,6 +1,8 @@
 package ai.tomorrow.movietime.overview
 
+import ai.tomorrow.movietime.BuildConfig
 import ai.tomorrow.movietime.network.MovieApi
+import ai.tomorrow.movietime.network.MovieApiSort
 import ai.tomorrow.movietime.network.MovieProperty
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -13,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 enum class MovieApiStatus { LOADING, ERROR, DONE }
-
+val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
@@ -56,7 +58,7 @@ class OverviewViewModel : ViewModel() {
      * Call getMoviesProperties() on init so we can display status immediately.
      */
     init {
-        getMoviesProperties()
+        getMoviesProperties(MovieApiSort.SHOW_POPULARITY)
     }
 
 
@@ -65,10 +67,10 @@ class OverviewViewModel : ViewModel() {
      * [MovieProperty] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
      * coroutine Deferred, which we await to get the result of the transaction.
      */
-    private fun getMoviesProperties() {
+    private fun getMoviesProperties(sort: MovieApiSort) {
         coroutineScope.launch {
             // Get the Deferred object for our Retrofit request
-            var getPropertiesDeferred = MovieApi.retrofitService.getProperties()
+            var getPropertiesDeferred = MovieApi.retrofitService.getProperties(api_key=movieDb_ApiKey, sort_by=sort.value)
 
             try {
                 _status.value = MovieApiStatus.LOADING
