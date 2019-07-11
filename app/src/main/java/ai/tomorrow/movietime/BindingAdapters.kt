@@ -6,12 +6,14 @@ import ai.tomorrow.movietime.overview.MoviePosterGridAdapter
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.youtube.player.YouTubePlayerFragment
 
 const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 private val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/"
@@ -66,3 +68,13 @@ fun bindStatus(statusImageView: ImageView, status: MovieApiStatus?) {
         }
     }
 }
+
+@BindingAdapter("hasVideoForPoster")
+fun hasVideoForPoster(imageView: ImageView, hasVideo: Boolean){
+    if (hasVideo){
+        imageView.visibility = View.GONE
+    } else {
+        imageView.visibility = View.VISIBLE
+    }
+}
+

@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="ai.tomorrow.movietime.detail.DetailViewModel" />
+                type="ai.tomorrow.movietime.detail.DetailViewModel"/>
     </data>
 
     <ScrollView
@@ -26,16 +26,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-            <!--<ImageView-->
-            <!--android:id="@+id/moive_poster"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:scaleType="centerInside"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--tools:src="@tools:sample/backgrounds/scenic"-->
-            <!--app:imageUrl="@{viewModel.selectedMovie.backdropPath}" />-->
+            <ImageView
+                    android:id="@+id/moive_poster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    tools:src="@tools:sample/backgrounds/scenic"
+                    app:imageUrl="@{viewModel.selectedMovie.backdropPath}"
+                    app:hasVideoForPoster="@{viewModel.hasVideo}"/>
 
             <TextView
                     android:id="@+id/moive_name_text"
@@ -44,7 +42,8 @@
                     android:layout_marginTop="16dp"
                     android:textColor="#de000000"
                     android:textSize="39sp"
-                    tools:text="Movie Name"/>
+                    tools:text="Movie Name"
+                    android:text="@{viewModel.selectedMovie.title}"/>
 
             <TextView
                     android:id="@+id/movie_overview_text"
@@ -53,7 +52,8 @@
                     android:layout_marginTop="8dp"
                     android:textColor="#de000000"
                     android:textSize="20sp"
-                    tools:text="overview"/>
+                    tools:text="overview"
+                    android:text="@{viewModel.selectedMovie.overview}"/>
 
         </LinearLayout>
     </ScrollView>

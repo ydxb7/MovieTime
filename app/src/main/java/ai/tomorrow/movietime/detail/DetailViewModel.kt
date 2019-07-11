@@ -21,8 +21,6 @@ import androidx.databinding.ViewDataBinding
 import com.google.android.youtube.player.YouTubePlayerFragment
 
 
-
-
 /**
  *  The [ViewModel] associated with the [DetailFragment], containing information about the selected
  *  [MovieProperty].
@@ -37,6 +35,11 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
     val selectedMovie: LiveData<MovieProperty>
         get() = _selectedMovie
 
+    private val _hasVideo = MutableLiveData<Boolean>()
+    val hasVideo: LiveData<Boolean>
+        get() = _hasVideo
+
+
     // Initialize the _selectedMovie MutableLiveData
     init {
         _selectedMovie.value = movieProperty
@@ -50,10 +53,9 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
 
     var videos: List<Video> = ArrayList()
 
+
     init {
         getVideoResults()
-
-
     }
 
     private fun getVideoResults() {
@@ -62,15 +64,43 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
             var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults()
 
             try {
+                _hasVideo.value = true
                 // this will run on a thread managed by Retrofit
                 val videoResults = getVideoResultsDeferred.await()
                 videos = videoResults.results
+                if (videos.size > 0){
+                    _hasVideo.value = true
+                } else {
+                    _hasVideo.value = false
+                }
                 Log.i("DetailViewModel", "videos size = " + videos.size)
 
             } catch (e: Exception) {
                 videos = ArrayList()
                 Log.i("DetailViewModel", "fetch video error")
             }
+        }
+    }
+
+
+    val onInitializedListener = object : YouTubePlayer.OnInitializedListener {
+        override fun onInitializationSuccess(
+            provider: YouTubePlayer.Provider,
+            youTubePlayer: YouTubePlayer,
+            b: Boolean
+        ) {
+//            if (videos.size > 0){
+//                youTubePlayer.cueVideo(videos[0].key)
+//            } else {
+                youTubePlayer.cueVideo("V38cLTYYXNw")
+//            }
+        }
+
+        override fun onInitializationFailure(
+            provider: YouTubePlayer.Provider,
+            youTubeInitializationResult: YouTubeInitializationResult
+        ) {
+
         }
     }
 

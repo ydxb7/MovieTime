@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -20,7 +21,9 @@ import com.google.android.youtube.player.internal.c
 import kotlinx.android.synthetic.main.fragment_detail.*
 
 class DetailFragment : Fragment() {
-    val Youtube_ApiKey = BuildConfig.Youtube_ApiKey
+    companion object{
+        val Youtube_ApiKey = BuildConfig.Youtube_ApiKey
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -29,23 +32,33 @@ class DetailFragment : Fragment() {
         binding.setLifecycleOwner(this)
         val movieProperty = DetailFragmentArgs.fromBundle(arguments!!).selectedMovie
         val viewModelFactory = DetailViewModelFactory(movieProperty, application)
-        binding.viewModel = ViewModelProviders.of(
-            this, viewModelFactory).get(DetailViewModel::class.java)
 
-        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager.findFragmentById(R.id.youtube_fragment)  as YouTubePlayerFragment
+        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
+        binding.viewModel = viewModel
 
-        youTubePlayerFragment.initialize(Youtube_ApiKey, onInitializedListener)
+        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
+            .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
+
+        viewModel.hasVideo.observe(this, Observer {
+            if (it){
+                youTubePlayerFragment.initialize(Youtube_ApiKey, onInitializedListener)
+            }
+        })
+
         return binding.root
     }
 
-    private val onInitializedListener = object : YouTubePlayer.OnInitializedListener {
+    val onInitializedListener = object : YouTubePlayer.OnInitializedListener {
         override fun onInitializationSuccess(
             provider: YouTubePlayer.Provider,
             youTubePlayer: YouTubePlayer,
             b: Boolean
         ) {
-            youTubePlayer.cueVideo("nCgQDjiotG0")
-
+//            if (videos.size > 0){
+//                youTubePlayer.cueVideo(videos[0].key)
+//            } else {
+            youTubePlayer.cueVideo("V38cLTYYXNw")
+//            }
         }
 
         override fun onInitializationFailure(
@@ -56,3 +69,4 @@ class DetailFragment : Fragment() {
         }
     }
 }
+
