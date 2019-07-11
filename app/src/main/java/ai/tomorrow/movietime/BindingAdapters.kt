@@ -69,12 +69,4 @@ fun bindStatus(statusImageView: ImageView, status: MovieApiStatus?) {
     }
 }
 
-@BindingAdapter("hasVideoForPoster")
-fun hasVideoForPoster(imageView: ImageView, hasVideo: Boolean){
-    if (hasVideo){
-        imageView.visibility = View.GONE
-    } else {
-        imageView.visibility = View.VISIBLE
-    }
-}
 

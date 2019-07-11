@@ -35,9 +35,9 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
     val selectedMovie: LiveData<MovieProperty>
         get() = _selectedMovie
 
-    private val _hasVideo = MutableLiveData<Boolean>()
-    val hasVideo: LiveData<Boolean>
-        get() = _hasVideo
+    private val _hasFinishGetResults = MutableLiveData<Boolean>()
+    val hasFinishGetResults: LiveData<Boolean>
+        get() = _hasFinishGetResults
 
 
     // Initialize the _selectedMovie MutableLiveData
@@ -64,21 +64,16 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
             var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults()
 
             try {
-                _hasVideo.value = true
                 // this will run on a thread managed by Retrofit
                 val videoResults = getVideoResultsDeferred.await()
                 videos = videoResults.results
-                if (videos.size > 0){
-                    _hasVideo.value = true
-                } else {
-                    _hasVideo.value = false
-                }
                 Log.i("DetailViewModel", "videos size = " + videos.size)
 
             } catch (e: Exception) {
                 videos = ArrayList()
                 Log.i("DetailViewModel", "fetch video error")
             }
+            _hasFinishGetResults.value = true
         }
     }
 
@@ -102,6 +97,10 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
         ) {
 
         }
+    }
+
+    fun finishGetResult(){
+        _hasFinishGetResults.value = false
     }
 
 

@@ -39,34 +39,23 @@ class DetailFragment : Fragment() {
         val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
             .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
 
-        viewModel.hasVideo.observe(this, Observer {
+        viewModel.hasFinishGetResults.observe(this, Observer {
             if (it){
-                youTubePlayerFragment.initialize(Youtube_ApiKey, onInitializedListener)
+                if (viewModel.videos.size > 0){
+                    youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
+                    viewModel.finishGetResult()
+                }
+                else{
+                    moive_poster.visibility = View.VISIBLE
+                }
+                viewModel.finishGetResult()
             }
+
         })
 
         return binding.root
     }
 
-    val onInitializedListener = object : YouTubePlayer.OnInitializedListener {
-        override fun onInitializationSuccess(
-            provider: YouTubePlayer.Provider,
-            youTubePlayer: YouTubePlayer,
-            b: Boolean
-        ) {
-//            if (videos.size > 0){
-//                youTubePlayer.cueVideo(videos[0].key)
-//            } else {
-            youTubePlayer.cueVideo("V38cLTYYXNw")
-//            }
-        }
 
-        override fun onInitializationFailure(
-            provider: YouTubePlayer.Provider,
-            youTubeInitializationResult: YouTubeInitializationResult
-        ) {
-
-        }
-    }
 }
 

@@ -31,9 +31,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerInside"
+                    android:visibility="gone"
                     tools:src="@tools:sample/backgrounds/scenic"
-                    app:imageUrl="@{viewModel.selectedMovie.backdropPath}"
-                    app:hasVideoForPoster="@{viewModel.hasVideo}"/>
+                    app:imageUrl="@{viewModel.selectedMovie.backdropPath}"/>
 
             <TextView
                     android:id="@+id/moive_name_text"
