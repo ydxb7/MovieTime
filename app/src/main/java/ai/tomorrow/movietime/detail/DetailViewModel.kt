@@ -5,21 +5,32 @@ import ai.tomorrow.movietime.network.Video
 import ai.tomorrow.movietime.network.VideoApi
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import android.R
+import androidx.databinding.ViewDataBinding
+import com.google.android.youtube.player.YouTubePlayerFragment
+
+
 
 
 /**
  *  The [ViewModel] associated with the [DetailFragment], containing information about the selected
  *  [MovieProperty].
  */
-class DetailViewModel(movieProperty: MovieProperty, app: Application) : AndroidViewModel(app) {
+
+//, YouTubePlayer.OnInitializedListener
+class DetailViewModel(movieProperty: MovieProperty, app: Application) :
+    AndroidViewModel(app) {
     private val _selectedMovie = MutableLiveData<MovieProperty>()
 
     // The external LiveData for the selectedMovie
@@ -41,6 +52,8 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) : AndroidV
 
     init {
         getVideoResults()
+
+
     }
 
     private fun getVideoResults() {
@@ -62,6 +75,24 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) : AndroidV
     }
 
 
+//
+//    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youTubePlayer: YouTubePlayer, wasRestored: Boolean) {
+//        if (!wasRestored) {
+//            youTubePlayer.cueVideo("nCgQDjiotG0");
+//        }
+//    }
+//
+//    override fun onInitializationFailure(p0: YouTubePlayer.Provider?, youTubeInitializationResult: YouTubeInitializationResult) {
+//        if (youTubeInitializationResult.isUserRecoverableError()) {
+////            youTubeInitializationResult.getErrorDialog(, 1).show()
+//        } else {
+//            val errorMessage = String.format(
+//                "There was an error initializing the YouTubePlayer (%1\$s)",
+//                youTubeInitializationResult.toString()
+//            )
+////            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+//        }
+//    }
 
 
 //    // The displayPropertyPrice formatted Transformation Map LiveData, which displays the sale

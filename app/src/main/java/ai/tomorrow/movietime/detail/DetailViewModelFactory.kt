@@ -2,6 +2,7 @@ package ai.tomorrow.movietime.detail
 
 import ai.tomorrow.movietime.network.MovieProperty
 import android.app.Application
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 

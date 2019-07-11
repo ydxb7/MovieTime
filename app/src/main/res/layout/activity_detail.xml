@@ -3,15 +3,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <!--<data>-->
-        <!--<variable-->
-                <!--name="viewModel"-->
-                <!--type="ai.tomorrow.movietime.detail.DetailViewModel"/>-->
-    <!--</data>-->
     <data>
         <variable
-                name="movie"
-                type="ai.tomorrow.movietime.network.MovieProperty" />
+                name="viewModel"
+                type="ai.tomorrow.movietime.detail.DetailViewModel" />
     </data>
 
     <ScrollView
@@ -24,16 +19,16 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-            <com.google.android.youtube.player.YouTubePlayerView
-                    android:id="@+id/youtube_view"
+            <!--<com.google.android.youtube.player.YouTubePlayerView-->
+            <!--android:id="@+id/youtube_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"/>-->
+
+            <fragment
+                    android:id="@+id/youtube_fragment"
+                    android:name="com.google.android.youtube.player.YouTubePlayerFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-
-            <!--<fragment-->
-                    <!--android:id="@+id/youtube_fragment"-->
-                    <!--android:name="com.google.android.youtube.player.YouTubePlayerFragment"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content" />-->
 
             <!--<ImageView-->
             <!--android:id="@+id/moive_poster"-->
@@ -54,7 +49,7 @@
                     android:textColor="#de000000"
                     android:textSize="39sp"
                     tools:text="Movie Name"
-                    android:text="@{movie.title}"/>
+                    android:text="@{viewModel.selectedMovie.title}"/>
 
             <TextView
                     android:id="@+id/movie_overview_text"
@@ -64,7 +59,7 @@
                     android:textColor="#de000000"
                     android:textSize="20sp"
                     tools:text="overview"
-                    android:text="@{movie.overview}"/>
+                    android:text="@{viewModel.selectedMovie.overview}"/>
 
         </LinearLayout>
     </ScrollView>

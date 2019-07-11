@@ -1,71 +1,76 @@
 package ai.tomorrow.movietime.detail
 
 import ai.tomorrow.movietime.BuildConfig
-import ai.tomorrow.movietime.BuildConfig.Youtube_ApiKey
-import ai.tomorrow.movietime.R
-import android.content.Intent
+import ai.tomorrow.movietime.databinding.ActivityDetailBinding
 import android.os.Bundle
-import android.widget.Toast
-import com.google.android.youtube.player.YouTubeBaseActivity
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.navArgs
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerView
+import com.google.android.youtube.player.YouTubePlayerFragment
+import kotlinx.android.synthetic.main.activity_detail.*
+
 
 val Youtube_ApiKey = BuildConfig.Youtube_ApiKey
 
-class DetailActivity : YouTubeFailureRecoveryActivity() {
+class DetailActivity : AppCompatActivity(), YouTubePlayer.OnInitializedListener {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
 
-        val youTubeView = findViewById(R.id.youtube_view) as YouTubePlayerView
-        youTubeView.initialize(Youtube_ApiKey, this)
+//        val application = requireNotNull(activity).application
+        val binding = ActivityDetailBinding.inflate(layoutInflater)
+
+
+//        val binding = FragmentDetailBinding.inflate(inflater)
+        binding.setLifecycleOwner(this)
+        Log.i("DetailFragment", " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
+        val mainActivityArgs by navArgs<DetailActivityArgs>()
+
+        val movieProperty = mainActivityArgs.selectedMovie
+
+
+        val viewModelFactory = DetailViewModelFactory(movieProperty, application)
+        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
+        binding.viewModel = viewModel
+//
+//        val youTubePlayerFragment = youtube_fragment as YouTubePlayerFragment
+//
+//
+        if (youtube_fragment == null){
+            Log.i("DetailFragment", "youTubePlayerFragment == null  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        } else{
+            Log.i("DetailFragment", "youTubePlayerFragment find  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        }
+
+//        youTubePlayerFragment.initialize("Youtube_ApiKey", this)
+//
+
 
     }
 
 
-    override fun onInitializationSuccess(
-        provider: YouTubePlayer.Provider, player: YouTubePlayer,
-        wasRestored: Boolean
-    ) {
+
+    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youTubePlayer: YouTubePlayer, wasRestored: Boolean) {
         if (!wasRestored) {
-            player.cueVideo("wKJ9KzGQq0w")
+            youTubePlayer.cueVideo("nCgQDjiotG0");
         }
     }
 
-    override val youTubePlayerProvider: YouTubePlayer.Provider
-        get() = findViewById(R.id.youtube_view) as YouTubePlayerView
-
-}
-
-abstract class YouTubeFailureRecoveryActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener {
-
-    protected abstract val youTubePlayerProvider: YouTubePlayer.Provider
-
-    override fun onInitializationFailure(
-        provider: YouTubePlayer.Provider,
-        errorReason: YouTubeInitializationResult
-    ) {
-        if (errorReason.isUserRecoverableError) {
-            errorReason.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show()
+    override fun onInitializationFailure(p0: YouTubePlayer.Provider?, youTubeInitializationResult: YouTubeInitializationResult) {
+        if (youTubeInitializationResult.isUserRecoverableError()) {
+//            youTubeInitializationResult.getErrorDialog(, 1).show()
         } else {
-            val errorMessage = String.format("Video load error", errorReason.toString())
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+            val errorMessage = String.format(
+                "There was an error initializing the YouTubePlayer (%1\$s)",
+                youTubeInitializationResult.toString()
+            )
+//            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        if (requestCode == RECOVERY_DIALOG_REQUEST) {
-            // Retry initialization if user performed a recovery action
-            youTubePlayerProvider.initialize(Youtube_ApiKey, this)
-        }
-    }
-
-    companion object {
-
-        private val RECOVERY_DIALOG_REQUEST = 1
     }
 
 }

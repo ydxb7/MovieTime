@@ -10,11 +10,11 @@
         <action android:id="@+id/action_overviewFragment_to_detailActivity" app:destination="@id/detailActivity"
                 app:popUpTo="@+id/overviewFragment"/>
     </fragment>
-
     <activity android:id="@+id/detailActivity" android:name="ai.tomorrow.movietime.detail.DetailActivity"
               android:label="DetailActivity">
         <argument
                 android:name="selectedMovie"
                 app:argType="ai.tomorrow.movietime.network.MovieProperty"/>
     </activity>
+
 </navigation>
