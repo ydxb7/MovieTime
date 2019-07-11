@@ -25,6 +25,9 @@ class DetailFragment : Fragment() {
         val Youtube_ApiKey = BuildConfig.Youtube_ApiKey
     }
 
+    private val youTubePlayerFragment by lazy { (context as AppCompatActivity).fragmentManager
+        .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val application = requireNotNull(activity).application
@@ -36,17 +39,21 @@ class DetailFragment : Fragment() {
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
 
-        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
-            .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
+        viewModel.getVideoResults()
+
+//        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
+//            .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
 
         viewModel.hasFinishGetResults.observe(this, Observer {
             if (it){
                 if (viewModel.videos.size > 0){
+                    Log.i("DetailFragment", "youTubePlayerFragment.initialize aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                     youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
                     viewModel.finishGetResult()
+
+                    Log.i("DetailFragment", "finishGetResult aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 }
                 else{
-                    Log.i("DetailFragment", "begin to hide aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                     youTubePlayerFragment.view.visibility = View.GONE
                     moive_poster.visibility = View.VISIBLE
                 }
@@ -59,16 +66,19 @@ class DetailFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
-            .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
+
+        Log.i("DetailFragment", "onDestroy11 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+//
+//        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
+//            .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
 //        val youTubePlayerFragment =
 //            (context as AppCompatActivity).fragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment?
 
         if (youTubePlayerFragment != null) {
             (context as AppCompatActivity).fragmentManager.beginTransaction().remove(youTubePlayerFragment).commitAllowingStateLoss()
         }
-
+        super.onDestroy()
+        Log.i("DetailFragment", "onDestroy22 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 //        youTubePlayer = null
     }
 

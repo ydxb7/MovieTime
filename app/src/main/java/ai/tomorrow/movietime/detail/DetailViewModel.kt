@@ -59,10 +59,10 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
 
 
     init {
-        getVideoResults()
+//        getVideoResults()
     }
 
-    private fun getVideoResults() {
+    fun getVideoResults() {
         coroutineScope.launch {
             // Get the Deferred object for our Retrofit request
             var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(selectedMovie.value!!.id.toString(), MovieDb_ApiKey)
