@@ -67,9 +67,6 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
             // Get the Deferred object for our Retrofit request
             var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(selectedMovie.value!!.id.toString(), MovieDb_ApiKey)
 
-
-            Log.i("DetailViewModel", "selectedMovie.value!!.id = " + selectedMovie.value!!.id)
-            Log.i("DetailViewModel", "selectedMovie.value = " + selectedMovie.value)
             try {
                 // this will run on a thread managed by Retrofit
                 val videoResults = getVideoResultsDeferred.await()

@@ -36,18 +36,18 @@ class DetailFragment : Fragment() {
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
 
-//        Log.i("DetailFragment", "onCreateView! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
+            .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
 
         viewModel.hasFinishGetResults.observe(this, Observer {
             if (it){
-//                Log.i("DetailFragment", "hasFinishGetResults! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 if (viewModel.videos.size > 0){
-                    val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
-                        .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
                     youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
                     viewModel.finishGetResult()
                 }
                 else{
+                    Log.i("DetailFragment", "begin to hide aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                    youTubePlayerFragment.view.visibility = View.GONE
                     moive_poster.visibility = View.VISIBLE
                 }
                 viewModel.finishGetResult()
