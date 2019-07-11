@@ -89,14 +89,13 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
             youTubePlayer: YouTubePlayer,
             wasRestored: Boolean
         ) {
-            Log.i("DetailViewModel", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  wasRestored = " + wasRestored )
-//            if (!wasRestored) {
+            if (!wasRestored) {
                 if (videos.size > 0) {
                     youTubePlayer.cueVideo(videos[0].key)
                 } else {
                     youTubePlayer.cueVideo("V38cLTYYXNw")
                 }
-//            }
+            }
         }
 
         override fun onInitializationFailure(
@@ -115,7 +114,6 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
         super.onCleared()
         finishGetResult()
         viewModelJob.cancel()
-        Log.i("DetailViewModel", "onCleared    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     }
 
 //
