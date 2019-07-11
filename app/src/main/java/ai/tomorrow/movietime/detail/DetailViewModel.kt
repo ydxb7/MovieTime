@@ -59,7 +59,7 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
 
 
     init {
-//        getVideoResults()
+        getVideoResults()
     }
 
     fun getVideoResults() {
@@ -71,7 +71,7 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
                 // this will run on a thread managed by Retrofit
                 val videoResults = getVideoResultsDeferred.await()
                 videos = videoResults.results
-                Log.i("DetailViewModel", "videos size = " + videos.size)
+//                Log.i("DetailViewModel", "videos size = " + videos.size)
 
             } catch (e: Exception) {
                 videos = ArrayList()
@@ -107,6 +107,12 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
         _hasFinishGetResults.value = false
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        finishGetResult()
+        viewModelJob.cancel()
+        Log.i("DetailViewModel", "onCleared    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    }
 
 //
 //    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youTubePlayer: YouTubePlayer, wasRestored: Boolean) {
