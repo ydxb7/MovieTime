@@ -84,11 +84,11 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
             youTubePlayer: YouTubePlayer,
             b: Boolean
         ) {
-//            if (videos.size > 0){
-//                youTubePlayer.cueVideo(videos[0].key)
-//            } else {
+            if (videos.size > 0){
+                youTubePlayer.cueVideo(videos[0].key)
+            } else {
                 youTubePlayer.cueVideo("V38cLTYYXNw")
-//            }
+            }
         }
 
         override fun onInitializationFailure(

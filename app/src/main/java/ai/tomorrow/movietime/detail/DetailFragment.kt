@@ -36,12 +36,14 @@ class DetailFragment : Fragment() {
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
 
-        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
-            .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
+//        Log.i("DetailFragment", "onCreateView! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 
         viewModel.hasFinishGetResults.observe(this, Observer {
             if (it){
+//                Log.i("DetailFragment", "hasFinishGetResults! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 if (viewModel.videos.size > 0){
+                    val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
+                        .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
                     youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
                     viewModel.finishGetResult()
                 }
@@ -54,6 +56,20 @@ class DetailFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val youTubePlayerFragment = (context as AppCompatActivity).fragmentManager
+            .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
+//        val youTubePlayerFragment =
+//            (context as AppCompatActivity).fragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment?
+
+        if (youTubePlayerFragment != null) {
+            (context as AppCompatActivity).fragmentManager.beginTransaction().remove(youTubePlayerFragment).commitAllowingStateLoss()
+        }
+
+//        youTubePlayer = null
     }
 
 
