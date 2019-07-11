@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
+        val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
         Log.i("MainActivity", movieDb_ApiKey)
 
     }

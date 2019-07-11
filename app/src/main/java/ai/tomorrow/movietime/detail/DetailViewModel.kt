@@ -1,5 +1,7 @@
 package ai.tomorrow.movietime.detail
 
+import ai.tomorrow.movietime.BuildConfig
+import ai.tomorrow.movietime.BuildConfig.MovieDb_ApiKey
 import ai.tomorrow.movietime.network.MovieProperty
 import ai.tomorrow.movietime.network.Video
 import ai.tomorrow.movietime.network.VideoApi
@@ -25,6 +27,8 @@ import com.google.android.youtube.player.YouTubePlayerFragment
  *  The [ViewModel] associated with the [DetailFragment], containing information about the selected
  *  [MovieProperty].
  */
+
+private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 
 //, YouTubePlayer.OnInitializedListener
 class DetailViewModel(movieProperty: MovieProperty, app: Application) :
@@ -61,8 +65,11 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
     private fun getVideoResults() {
         coroutineScope.launch {
             // Get the Deferred object for our Retrofit request
-            var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults()
+            var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(selectedMovie.value!!.id.toString(), MovieDb_ApiKey)
 
+
+            Log.i("DetailViewModel", "selectedMovie.value!!.id = " + selectedMovie.value!!.id)
+            Log.i("DetailViewModel", "selectedMovie.value = " + selectedMovie.value)
             try {
                 // this will run on a thread managed by Retrofit
                 val videoResults = getVideoResultsDeferred.await()

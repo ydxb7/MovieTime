@@ -8,11 +8,13 @@ import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 
 private val MOVIE_LIST_URL = "https://api.themoviedb.org/3/discover/"
-private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/245891/"
+private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/"
 
 private const val BASE_URL = "https://mars.udacity.com/"
 
@@ -59,8 +61,8 @@ object MovieApi {
 }
 
 interface VideoApiService{
-    @GET("videos?api_key=$movieDb_ApiKey&language=en-US")
-    fun getVideoResults():
+    @GET("{movieId}/videos")
+    fun getVideoResults(@Path("movieId") movieId: String, @Query("api_key") api_key: String):
             Deferred<VideoResult>
 }
 
