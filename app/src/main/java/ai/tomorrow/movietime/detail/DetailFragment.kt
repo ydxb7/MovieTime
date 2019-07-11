@@ -45,7 +45,7 @@ class DetailFragment : Fragment() {
 //            Log.i("DetailFragment", " hasFinishGetResults = " + it)
             if (it){
                 if (viewModel.videos.size > 0){
-                    Log.i("DetailFragment", " youTubePlayerFragment.initialize  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" )
+//                    Log.i("DetailFragment", " youTubePlayerFragment.initialize  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" )
                     youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
 //                    viewModel.finishGetResult()
                 }

@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 enum class MovieApiStatus { LOADING, ERROR, DONE }
 
@@ -17,6 +18,7 @@ enum class MovieApiStatus { LOADING, ERROR, DONE }
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
 class OverviewViewModel : ViewModel() {
+    private var sort = SortHolder()
 
     // The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<MovieApiStatus>()
@@ -31,6 +33,11 @@ class OverviewViewModel : ViewModel() {
     // The external LiveData interface to the property is immutable, so only this class can modify
     val properties: LiveData<List<MovieProperty>>
         get() = _properties
+
+    private val _movieList = MutableLiveData<List<String>>()
+
+    val movieList: LiveData<List<String>>
+        get() = _movieList
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
     private val _navigateToSelectedMovie = MutableLiveData<MovieProperty>()
@@ -76,6 +83,28 @@ class OverviewViewModel : ViewModel() {
         }
     }
 
+//    private fun onQueryChanged() {
+//        coroutineScope.launch {
+//            try {
+//                // this will run on a thread managed by Retrofit
+//                _properties.value = repository.getChaptersForFilter(filter.currentValue)
+//                repository.getFilters().let {
+//                    // only update the filters list if it's changed since the last time
+//                    if (it != _regionList.value) {
+//                        _regionList.value = it
+//                    }
+//                }
+//            } catch (e: IOException) {
+//                _gdgList.value = listOf()
+//            }
+//        }
+//    }
+
+//    fun onSortChanged(filter: String, isChecked: Boolean) {
+//        if (this.sort.update(filter, isChecked)) {
+//            onQueryChanged()
+//        }
+//    }
     /**
      * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
      * @param marsProperty The [MarsProperty] that was clicked on.
@@ -101,5 +130,19 @@ class OverviewViewModel : ViewModel() {
         viewModelJob.cancel()
     }
 
+    private class SortHolder {
+        var currentValue: String? = null
+            private set
 
+        fun update(changedSort: String, isChecked: Boolean): Boolean {
+            if (isChecked) {
+                currentValue = changedSort
+                return true
+            } else if (currentValue == changedSort) {
+                currentValue = null
+                return true
+            }
+            return false
+        }
+    }
 }

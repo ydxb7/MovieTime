@@ -18,6 +18,8 @@ private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/"
 
 private const val BASE_URL = "https://mars.udacity.com/"
 
+enum class MovieApiSort(val value: String){SHOW_RENT("rent"), SHOW_BUY("buy"), SHOW_ALL("all")}
+
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
  * full Kotlin compatibility.

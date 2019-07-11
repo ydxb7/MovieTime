@@ -1,5 +1,6 @@
 package ai.tomorrow.movietime.overview
 
+import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentOverviewBinding
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.chip.Chip
 
 /**
  * This fragment shows the the status of the Mars real-estate web services transaction.
@@ -53,6 +55,37 @@ class OverviewFragment : Fragment() {
                 viewModel.displayPropertyDetailsComplete()
             }
         })
+
+//        // TODO (04) Create an observer on viewModel.regionList. Override the required
+//        // onChanged() method to include the following changes.
+//        viewModel.movieList.observe(viewLifecycleOwner, object: Observer<List<String>> {
+//            override fun onChanged(data: List<String>?) {
+//                data ?: return
+//                // TODO (05) Create a new layoutInflator from the ChipGroup.
+//                val chipGroup = binding.moviesList
+//                val inflator = LayoutInflater.from(chipGroup.context)
+//
+//                // TODO (06) Use the map() function to create a Chip for each item in regionList and
+//                // return the results as a new list called children.
+//                val children = data.map { regionName ->
+//                    val chip = inflator.inflate(R.layout.movie_sort, chipGroup, false) as Chip
+//                    chip.text = regionName
+//                    chip.tag = regionName
+//                    chip.setOnCheckedChangeListener { button, isChecked ->
+//                        viewModel.onFilterChanged(button.tag as String, isChecked)
+//                    }
+//                    chip
+//                }
+//
+//                // TODO (07) Call chipGroup.removeAllViews() to remove any views already in chipGroup.
+//                chipGroup.removeAllViews()
+//
+//                // TODO (08)  Iterate through the list of children and add each chip to chipGroup.
+//                for (chip in children) {
+//                    chipGroup.addView(chip)
+//                }
+//            }
+//        })
 
         return binding.root
     }
