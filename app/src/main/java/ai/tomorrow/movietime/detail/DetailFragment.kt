@@ -55,7 +55,7 @@ class DetailFragment : Fragment() {
                 }
 //                viewModel.finishGetResult()
             }
-
+//
         })
 
         return binding.root

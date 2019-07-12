@@ -17,7 +17,7 @@ val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
-class OverviewViewModel : ViewModel() {
+class OverviewViewModel(val sort: String) : ViewModel() {
 //    private var sort = SortHolder()
 
     // The internal MutableLiveData that stores the status of the most recent request
@@ -34,10 +34,10 @@ class OverviewViewModel : ViewModel() {
     val properties: LiveData<List<MovieProperty>>
         get() = _properties
 
-    private val _movieList = MutableLiveData<List<String>>()
-//
-    val movieList: LiveData<List<String>>
-        get() = _movieList
+//    private val _movieList = MutableLiveData<List<String>>()
+////
+//    val movieList: LiveData<List<String>>
+//        get() = _movieList
 
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
@@ -57,8 +57,8 @@ class OverviewViewModel : ViewModel() {
      * Call getMoviesProperties() on init so we can display status immediately.
      */
     init {
-        _movieList.value = movieSortList
-//        getMoviesProperties(MovieApiSort.SHOW_VOTE)
+//        _movieList.value = movieSortList
+        getMoviesProperties()
     }
 
 
@@ -67,11 +67,11 @@ class OverviewViewModel : ViewModel() {
      * [MovieProperty] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
      * coroutine Deferred, which we await to get the result of the transaction.
      */
-    private fun getMoviesProperties(sort: MovieApiSort) {
+    private fun getMoviesProperties() {
         coroutineScope.launch {
             // Get the Deferred object for our Retrofit request
-            var getPropertiesDeferred = MovieApi.retrofitService.getProperties(api_key=movieDb_ApiKey, sort_by=sort.value)
-            Log.i("OverviewViewModel", "sort_by = " + sort.value)
+            var getPropertiesDeferred = MovieApi.retrofitService.getMovieList(sort=sort, api_key=movieDb_ApiKey)
+            Log.i("OverviewViewModel", "sort_by = " + sort)
 
 
             try {
@@ -91,12 +91,13 @@ class OverviewViewModel : ViewModel() {
         }
     }
 
-
-    fun onSortChanged(sortTag: String, isChecked: Boolean) {
-        if (isChecked){
-            getMoviesProperties(movieSortMap[sortTag]!!)
-        }
-    }
+//
+//    fun onSortChanged(sortTag: String, isChecked: Boolean) {
+//        if (isChecked){
+//            Log.i("OverviewViewModel", "sortTag = " + sortTag)
+//            getMoviesProperties(movieSortMap[sortTag]!!)
+//        }
+//    }
     /**
      * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
      * @param marsProperty The [MarsProperty] that was clicked on.

@@ -116,44 +116,5 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
         viewModelJob.cancel()
     }
 
-//
-//    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youTubePlayer: YouTubePlayer, wasRestored: Boolean) {
-//        if (!wasRestored) {
-//            youTubePlayer.cueVideo("nCgQDjiotG0");
-//        }
-//    }
-//
-//    override fun onInitializationFailure(p0: YouTubePlayer.Provider?, youTubeInitializationResult: YouTubeInitializationResult) {
-//        if (youTubeInitializationResult.isUserRecoverableError()) {
-////            youTubeInitializationResult.getErrorDialog(, 1).show()
-//        } else {
-//            val errorMessage = String.format(
-//                "There was an error initializing the YouTubePlayer (%1\$s)",
-//                youTubeInitializationResult.toString()
-//            )
-////            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-//        }
-//    }
 
-
-//    // The displayPropertyPrice formatted Transformation Map LiveData, which displays the sale
-//    // or rental price.
-//    val displayPropertyPrice = Transformations.map(selectedMovie) {
-//        app.applicationContext.getString(
-//            when (it.isRental) {
-//                true -> R.string.display_price_monthly_rental
-//                false -> R.string.display_price
-//            }, it.price)
-//    }
-
-//    // The displayPropertyType formatted Transformation Map LiveData, which displays the
-//    // "For Rent/Sale" String
-//    val displayPropertyType = Transformations.map(selectedProperty) {
-//        app.applicationContext.getString(R.string.display_type,
-//            app.applicationContext.getString(
-//                when(it.isRental) {
-//                    true -> R.string.type_rent
-//                    false -> R.string.type_sale
-//                }))
-//    }
 }
