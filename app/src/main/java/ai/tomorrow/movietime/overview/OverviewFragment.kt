@@ -2,10 +2,12 @@ package ai.tomorrow.movietime.overview
 
 import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentOverviewBinding
+import ai.tomorrow.movietime.network.movieSortList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -56,38 +58,35 @@ class OverviewFragment : Fragment() {
             }
         })
 
-        // TODO (04) Create an observer on viewModel.regionList. Override the required
-        // onChanged() method to include the following changes.
-        viewModel.movieList.observe(viewLifecycleOwner, object: Observer<List<String>> {
-            override fun onChanged(data: List<String>?) {
-                data ?: return
-                // TODO (05) Create a new layoutInflator from the ChipGroup.
-                val chipGroup = binding.moviesList
-                val inflator = LayoutInflater.from(chipGroup.context)
+        bindChipGroup(binding)
 
-                // TODO (06) Use the map() function to create a Chip for each item in regionList and
-                // return the results as a new list called children.
-                val children = data.map { regionName ->
-                    val chip = inflator.inflate(R.layout.movie_sort, chipGroup, false) as Chip
-                    chip.text = regionName
-                    chip.tag = regionName
-                    chip.setOnCheckedChangeListener { button, isChecked ->
-                        viewModel.onSortChanged(button.tag as String, isChecked)
-                    }
-                    chip
-                }
 
-                // TODO (07) Call chipGroup.removeAllViews() to remove any views already in chipGroup.
-                chipGroup.removeAllViews()
 
-                // TODO (08)  Iterate through the list of children and add each chip to chipGroup.
-                for (chip in children) {
-                    chipGroup.addView(chip)
-                }
-            }
-        })
+
 
         return binding.root
+    }
+
+    private fun bindChipGroup(binding: FragmentOverviewBinding) {
+        val chipGroup = binding.moviesList
+        val inflator = LayoutInflater.from(chipGroup.context)
+
+        // Use the map() function to create a Chip for each item in regionList and return the results as a new list called children.
+        val children = movieSortList.map { regionName ->
+            val chip = inflator.inflate(R.layout.movie_sort, chipGroup, false) as Chip
+            chip.text = regionName
+            chip.tag = regionName
+            chip.setOnCheckedChangeListener { button, isChecked ->
+                viewModel.onSortChanged(button.tag as String, isChecked)
+            }
+            chip
+        }
+
+        for (chip in children) {
+            chipGroup.addView(chip)
+        }
+
+        chipGroup.check(chipGroup[0].id)
     }
 
 

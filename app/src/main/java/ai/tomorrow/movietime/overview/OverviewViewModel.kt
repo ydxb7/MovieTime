@@ -58,7 +58,7 @@ class OverviewViewModel : ViewModel() {
      */
     init {
         _movieList.value = movieSortList
-        getMoviesProperties(MovieApiSort.SHOW_VOTE)
+//        getMoviesProperties(MovieApiSort.SHOW_VOTE)
     }
 
 
