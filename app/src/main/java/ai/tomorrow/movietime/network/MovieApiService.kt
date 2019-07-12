@@ -19,6 +19,8 @@ private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/"
 private const val BASE_URL = "https://mars.udacity.com/"
 
 enum class MovieApiSort(val value: String){SHOW_POPULARITY("popularity.desc"), SHOW_VOTE("vote_average.desc")}
+val movieSortList = listOf<String>( "popularity", "vote_average")
+val movieSortMap = mapOf("popularity" to MovieApiSort.SHOW_POPULARITY, "vote_average" to MovieApiSort.SHOW_VOTE)
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for

@@ -1,9 +1,7 @@
 package ai.tomorrow.movietime.overview
 
 import ai.tomorrow.movietime.BuildConfig
-import ai.tomorrow.movietime.network.MovieApi
-import ai.tomorrow.movietime.network.MovieApiSort
-import ai.tomorrow.movietime.network.MovieProperty
+import ai.tomorrow.movietime.network.*
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,7 +18,7 @@ val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
 class OverviewViewModel : ViewModel() {
-    private var sort = SortHolder()
+//    private var sort = SortHolder()
 
     // The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<MovieApiStatus>()
@@ -37,9 +35,10 @@ class OverviewViewModel : ViewModel() {
         get() = _properties
 
     private val _movieList = MutableLiveData<List<String>>()
-
+//
     val movieList: LiveData<List<String>>
         get() = _movieList
+
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
     private val _navigateToSelectedMovie = MutableLiveData<MovieProperty>()
@@ -58,6 +57,7 @@ class OverviewViewModel : ViewModel() {
      * Call getMoviesProperties() on init so we can display status immediately.
      */
     init {
+        _movieList.value = movieSortList
         getMoviesProperties(MovieApiSort.SHOW_POPULARITY)
     }
 
@@ -71,6 +71,8 @@ class OverviewViewModel : ViewModel() {
         coroutineScope.launch {
             // Get the Deferred object for our Retrofit request
             var getPropertiesDeferred = MovieApi.retrofitService.getProperties(api_key=movieDb_ApiKey, sort_by=sort.value)
+            Log.i("OverviewViewModel", "sort_by = " + sort.value)
+
 
             try {
                 _status.value = MovieApiStatus.LOADING
@@ -78,35 +80,21 @@ class OverviewViewModel : ViewModel() {
                 val pageResult = getPropertiesDeferred.await()
                 _status.value = MovieApiStatus.DONE
                 _properties.value = pageResult.results
+                Log.i("OverviewViewModel", "fetch movie list success!  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             } catch (e: Exception) {
                 _status.value = MovieApiStatus.ERROR
                 _properties.value = ArrayList()
+                Log.i("OverviewViewModel", "fetch movie list error!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             }
         }
     }
 
-//    private fun onQueryChanged() {
-//        coroutineScope.launch {
-//            try {
-//                // this will run on a thread managed by Retrofit
-//                _properties.value = repository.getChaptersForFilter(filter.currentValue)
-//                repository.getFilters().let {
-//                    // only update the filters list if it's changed since the last time
-//                    if (it != _regionList.value) {
-//                        _regionList.value = it
-//                    }
-//                }
-//            } catch (e: IOException) {
-//                _gdgList.value = listOf()
-//            }
-//        }
-//    }
 
-//    fun onSortChanged(filter: String, isChecked: Boolean) {
-//        if (this.sort.update(filter, isChecked)) {
-//            onQueryChanged()
-//        }
-//    }
+    fun onSortChanged(sortTag: String, isChecked: Boolean) {
+        if (isChecked){
+            getMoviesProperties(movieSortMap[sortTag]!!)
+        }
+    }
     /**
      * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
      * @param marsProperty The [MarsProperty] that was clicked on.
@@ -132,19 +120,19 @@ class OverviewViewModel : ViewModel() {
         viewModelJob.cancel()
     }
 
-    private class SortHolder {
-        var currentValue: String? = null
-            private set
-
-        fun update(changedSort: String, isChecked: Boolean): Boolean {
-            if (isChecked) {
-                currentValue = changedSort
-                return true
-            } else if (currentValue == changedSort) {
-                currentValue = null
-                return true
-            }
-            return false
-        }
-    }
+//    private class SortHolder {
+//        var currentValue: String? = null
+//            private set
+//
+//        fun update(changedSort: String, isChecked: Boolean): Boolean {
+//            if (isChecked) {
+//                currentValue = changedSort
+//                return true
+//            } else if (currentValue == changedSort) {
+//                currentValue = null
+//                return true
+//            }
+//            return false
+//        }
+//    }
 }
