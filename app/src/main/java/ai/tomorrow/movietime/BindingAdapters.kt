@@ -33,17 +33,20 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<MovieProperty>?) {
  */
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, posterPath: String?) {
-    val imgUri = IMAGE_BASE_URL.toUri().buildUpon().scheme("https").appendPath(posterPath).build()
-    Glide.with(imgView.context)
-        .load(imgUri)
-        .apply(
-            RequestOptions()
-                .placeholder(R.drawable.loading_animation)
-                .error(R.drawable.ic_broken_image)
-                .transforms(RoundedCorners(20))
-        )
-        .into(imgView)
-
+    if (posterPath == null){
+        imgView.setImageResource(R.drawable.ic_connection_error)
+    } else {
+        val imgUri = IMAGE_BASE_URL.toUri().buildUpon().scheme("https").appendPath(posterPath).build()
+        Glide.with(imgView.context)
+            .load(imgUri)
+            .apply(
+                RequestOptions()
+                    .placeholder(R.drawable.loading_animation)
+                    .error(R.drawable.ic_broken_image)
+                    .transforms(RoundedCorners(20))
+            )
+            .into(imgView)
+    }
 }
 
 /**

@@ -58,7 +58,7 @@ class OverviewViewModel : ViewModel() {
      */
     init {
         _movieList.value = movieSortList
-        getMoviesProperties(MovieApiSort.SHOW_POPULARITY)
+        getMoviesProperties(MovieApiSort.SHOW_VOTE)
     }
 
 
@@ -81,10 +81,12 @@ class OverviewViewModel : ViewModel() {
                 _status.value = MovieApiStatus.DONE
                 _properties.value = pageResult.results
                 Log.i("OverviewViewModel", "fetch movie list success!  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                Log.i("OverviewViewModel", "pageResult = " + pageResult)
             } catch (e: Exception) {
                 _status.value = MovieApiStatus.ERROR
                 _properties.value = ArrayList()
                 Log.i("OverviewViewModel", "fetch movie list error!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                Log.i("OverviewViewModel", "" + e)
             }
         }
     }

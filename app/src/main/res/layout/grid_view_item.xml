@@ -13,6 +13,6 @@
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
             android:padding="2dp"
-            app:imageUrl="@{movie.backdropPath}"
+            app:imageUrl="@{movie.posterPath}"
             tools:src="@tools:sample/backgrounds/scenic"/>
 </layout>

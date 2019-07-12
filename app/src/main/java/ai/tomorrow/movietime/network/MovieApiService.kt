@@ -7,6 +7,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -36,6 +37,7 @@ private val moshi = Moshi.Builder()
  */
 private val retrofitMovie = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
+//    .addConverterFactory(ScalarsConverterFactory.create())
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .baseUrl(MOVIE_LIST_URL)
     .build()
