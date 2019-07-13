@@ -2,12 +2,11 @@ package ai.tomorrow.movietime.detail
 
 import ai.tomorrow.movietime.BuildConfig
 import ai.tomorrow.movietime.BuildConfig.MovieDb_ApiKey
-import ai.tomorrow.movietime.network.MovieProperty
-import ai.tomorrow.movietime.network.Video
+import ai.tomorrow.movietime.network.MovieNetwork
+import ai.tomorrow.movietime.network.VideoNetwork
 import ai.tomorrow.movietime.network.VideoApi
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,25 +17,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import android.R
-import androidx.databinding.ViewDataBinding
-import com.google.android.youtube.player.YouTubePlayerFragment
 
 
 /**
  *  The [ViewModel] associated with the [DetailFragment], containing information about the selected
- *  [MovieProperty].
+ *  [MovieNetwork].
  */
 
 private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 
 //, YouTubePlayer.OnInitializedListener
-class DetailViewModel(movieProperty: MovieProperty, app: Application) :
+class DetailViewModel(movieNetwork: MovieNetwork, app: Application) :
     AndroidViewModel(app) {
-    private val _selectedMovie = MutableLiveData<MovieProperty>()
+    private val _selectedMovie = MutableLiveData<MovieNetwork>()
 
     // The external LiveData for the selectedMovie
-    val selectedMovie: LiveData<MovieProperty>
+    val selectedMovie: LiveData<MovieNetwork>
         get() = _selectedMovie
 
     private val _hasFinishGetResults = MutableLiveData<Boolean>()
@@ -46,7 +42,7 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
 
     // Initialize the _selectedMovie MutableLiveData
     init {
-        _selectedMovie.value = movieProperty
+        _selectedMovie.value = movieNetwork
     }
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -55,7 +51,7 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    var videos: List<Video> = ArrayList()
+    var videoNetworks: List<VideoNetwork> = ArrayList()
 
 
     init {
@@ -71,11 +67,11 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
             try {
                 // this will run on a thread managed by Retrofit
                 val videoResults = getVideoResultsDeferred.await()
-                videos = videoResults.results
-//                Log.i("DetailViewModel", "videos size = " + videos.size)
+                videoNetworks = videoResults.results
+//                Log.i("DetailViewModel", "videoNetworks size = " + videoNetworks.size)
 
             } catch (e: Exception) {
-                videos = ArrayList()
+                videoNetworks = ArrayList()
                 Log.i("DetailViewModel", "fetch video error")
             }
             _hasFinishGetResults.value = true
@@ -90,8 +86,8 @@ class DetailViewModel(movieProperty: MovieProperty, app: Application) :
             wasRestored: Boolean
         ) {
             if (!wasRestored) {
-                if (videos.size > 0) {
-                    youTubePlayer.cueVideo(videos[0].key)
+                if (videoNetworks.size > 0) {
+                    youTubePlayer.cueVideo(videoNetworks[0].key)
                 } else {
                     youTubePlayer.cueVideo("V38cLTYYXNw")
                 }

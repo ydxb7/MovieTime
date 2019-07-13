@@ -5,7 +5,7 @@
     <data>
         <variable
                 name="movie"
-                type="ai.tomorrow.movietime.network.MovieProperty" />
+                type="ai.tomorrow.movietime.network.MovieNetwork" />
     </data>
     <ImageView
             android:id="@+id/movies_poster"

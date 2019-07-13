@@ -9,11 +9,11 @@ data class MoviePage(
     val page: Int,
     @Json(name = "total_results") val totalResults: Int,
     @Json(name = "total_pages") val totalPages: Int,
-    val results: List<MovieProperty>
+    val results: List<MovieNetwork>
 )
 
 @Parcelize
-data class MovieProperty(
+data class MovieNetwork(
     val id: Long,
     @Json(name = "vote_count") val voteCount: String,
     @Json(name = "vote_average") val voteAverage: Double,
@@ -33,7 +33,7 @@ data class MovieProperty(
 }
 
 
-data class Video(
+data class VideoNetwork(
     @Json(name = "id") val videoId: String,
     val key: String,
     val name: String,
@@ -44,6 +44,6 @@ data class Video(
 
 data class VideoResult(
     @Json(name = "id") val movieId: Long,
-    val results: List<Video>
+    val results: List<VideoNetwork>
 )
 

@@ -7,7 +7,6 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -50,7 +49,7 @@ private val retrofitMovie = Retrofit.Builder()
  */
 interface MovieApiService {
     /**
-     * Returns a Coroutine [Deferred] [List] of [MovieProperty] which can be fetched with await() if
+     * Returns a Coroutine [Deferred] [List] of [MovieNetwork] which can be fetched with await() if
      * in a Coroutine scope.
      * The @GET annotation indicates that the "primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22"
      * endpoint will be requested with the GET HTTP method
@@ -69,7 +68,7 @@ object MovieApi {
 }
 
 interface VideoApiService{
-    @GET("{movieId}/videos")
+    @GET("{movieId}/videoNetworks")
     fun getVideoResults(@Path("movieId") movieId: String, @Query("api_key") api_key: String):
             Deferred<VideoResult>
 }

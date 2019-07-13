@@ -5,7 +5,6 @@ import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentDetailBinding
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,10 +40,10 @@ class DetailFragment : Fragment() {
 
         viewModel.hasFinishGetResults.observe(this, Observer {
 
-//            Log.i("DetailFragment", " viewModel.videos.size = " + viewModel.videos.size)
+//            Log.i("DetailFragment", " viewModel.videoNetworks.size = " + viewModel.videoNetworks.size)
 //            Log.i("DetailFragment", " hasFinishGetResults = " + it)
             if (it){
-                if (viewModel.videos.size > 0){
+                if (viewModel.videoNetworks.size > 0){
 //                    Log.i("DetailFragment", " youTubePlayerFragment.initialize  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" )
                     youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
 //                    viewModel.finishGetResult()

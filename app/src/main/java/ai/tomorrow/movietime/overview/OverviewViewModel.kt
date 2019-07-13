@@ -10,7 +10,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 enum class MovieApiStatus { LOADING, ERROR, DONE }
 val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
@@ -27,11 +26,11 @@ class OverviewViewModel(val sort: String) : ViewModel() {
     val status: LiveData<MovieApiStatus>
         get() = _status
 
-    // Internally, we use a MutableLiveData, because we will be updating the List of MovieProperty with new values
-    private val _properties = MutableLiveData<List<MovieProperty>>()
+    // Internally, we use a MutableLiveData, because we will be updating the List of MovieNetwork with new values
+    private val _properties = MutableLiveData<List<MovieNetwork>>()
 
     // The external LiveData interface to the property is immutable, so only this class can modify
-    val properties: LiveData<List<MovieProperty>>
+    val properties: LiveData<List<MovieNetwork>>
         get() = _properties
 
 //    private val _movieList = MutableLiveData<List<String>>()
@@ -41,10 +40,10 @@ class OverviewViewModel(val sort: String) : ViewModel() {
 
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
-    private val _navigateToSelectedMovie = MutableLiveData<MovieProperty>()
+    private val _navigateToSelectedMovie = MutableLiveData<MovieNetwork>()
 
     // The external immutable LiveData for the navigation property
-    val navigateToSelectedMovie: LiveData<MovieProperty>
+    val navigateToSelectedMovie: LiveData<MovieNetwork>
         get() = _navigateToSelectedMovie
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -64,7 +63,7 @@ class OverviewViewModel(val sort: String) : ViewModel() {
 
     /**
      * Gets Movies property information from the Movie API Retrofit service and updates the
-     * [MovieProperty] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
+     * [MovieNetwork] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
      * coroutine Deferred, which we await to get the result of the transaction.
      */
     private fun getMoviesProperties() {
@@ -102,8 +101,8 @@ class OverviewViewModel(val sort: String) : ViewModel() {
      * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
      * @param marsProperty The [MarsProperty] that was clicked on.
      */
-    fun displayPropertyDetails(movieProperty: MovieProperty) {
-        _navigateToSelectedMovie.value = movieProperty
+    fun displayPropertyDetails(movieNetwork: MovieNetwork) {
+        _navigateToSelectedMovie.value = movieNetwork
     }
 
     /**

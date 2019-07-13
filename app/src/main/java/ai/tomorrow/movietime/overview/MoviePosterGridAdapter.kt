@@ -1,31 +1,23 @@
 package ai.tomorrow.movietime.overview
 
-import ai.tomorrow.movietime.databinding.GridViewItemBinding
-import ai.tomorrow.movietime.network.MovieProperty
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-
 /**
  * This class implements a [RecyclerView] [ListAdapter] which uses Data Binding to present [List]
  * data, including computing diffs between lists.
  * @param onClick a lambda that takes the
  */
 //class MoviePosterGridAdapter( val onClickListener: OnClickListener ) :
-//    ListAdapter<MovieProperty, MoviePosterGridAdapter.MoviePropertyViewHolder>(DiffCallback) {
+//    ListAdapter<MovieNetwork, MoviePosterGridAdapter.MoviePropertyViewHolder>(DiffCallback) {
 //
 //    /**
-//     * Allows the RecyclerView to determine which items have changed when the [List] of [MovieProperty]
+//     * Allows the RecyclerView to determine which items have changed when the [List] of [MovieNetwork]
 //     * has been updated.
 //     */
-//    companion object DiffCallback : DiffUtil.ItemCallback<MovieProperty>() {
-//        override fun areItemsTheSame(oldItem: MovieProperty, newItem: MovieProperty): Boolean {
+//    companion object DiffCallback : DiffUtil.ItemCallback<MovieNetwork>() {
+//        override fun areItemsTheSame(oldItem: MovieNetwork, newItem: MovieNetwork): Boolean {
 //            return oldItem === newItem
 //        }
 //
-//        override fun areContentsTheSame(oldItem: MovieProperty, newItem: MovieProperty): Boolean {
+//        override fun areContentsTheSame(oldItem: MovieNetwork, newItem: MovieNetwork): Boolean {
 //            return oldItem.id == newItem.id
 //        }
 //    }
@@ -36,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 //     */
 //    class MoviePropertyViewHolder(private var binding: GridViewItemBinding):
 //        RecyclerView.ViewHolder(binding.root) {
-//        fun bind(movieProperty: MovieProperty) {
+//        fun bind(movieProperty: MovieNetwork) {
 //            binding.movie = movieProperty
 //            // This is important, because it forces the data binding to execute immediately,
 //            // which allows the RecyclerView to make the correct view size measurements
@@ -64,11 +56,11 @@ import androidx.recyclerview.widget.RecyclerView
 //    }
 //
 //    /**
-//     * Custom listener that handles clicks on [RecyclerView] items.  Passes the [MovieProperty]
+//     * Custom listener that handles clicks on [RecyclerView] items.  Passes the [MovieNetwork]
 //     * associated with the current item to the [onClick] function.
-//     * @param clickListener lambda that will be called with the current [MovieProperty]
+//     * @param clickListener lambda that will be called with the current [MovieNetwork]
 //     */
-//    class OnClickListener(val clickListener: (movieProperty: MovieProperty) -> Unit) {
-//        fun onClick(movieProperty:MovieProperty) = clickListener(movieProperty)
+//    class OnClickListener(val clickListener: (movieProperty: MovieNetwork) -> Unit) {
+//        fun onClick(movieProperty:MovieNetwork) = clickListener(movieProperty)
 //    }
 //}
