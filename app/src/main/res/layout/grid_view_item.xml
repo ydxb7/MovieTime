@@ -10,8 +10,10 @@
     <ImageView
             android:id="@+id/movies_poster"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="2dp"
+            android:layout_height="200dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="4dp"
+            android:padding="8dp"
             app:imageUrl="@{movie.backdropPath}"
             tools:src="@tools:sample/backgrounds/scenic"/>
 </layout>

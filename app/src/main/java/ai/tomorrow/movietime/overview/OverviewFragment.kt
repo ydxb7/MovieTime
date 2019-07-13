@@ -1,15 +1,20 @@
 package ai.tomorrow.movietime.overview
 
+import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentOverviewBinding
 import ai.tomorrow.movietime.viewPages.ViewPatersFragmentDirections
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+
 
 /**
  * This fragment shows the the status of the Mars real-estate web services transaction.
@@ -38,6 +43,11 @@ class OverviewFragment(val sort: String) : Fragment() {
         binding.postersGrid.adapter = MovieListAdapter(MovieListAdapter.OnClickListener {
             viewModel.displayPropertyDetails(it)
         })
+
+
+//        val dividerItemDecoration = DividerItemDecoration(binding.postersGrid.getContext(), R.drawable.divider)
+////        val divider = ContextCompat.getDrawable(context!!, R.drawable.divider) as DividerItemDecoration
+//        binding.postersGrid.addItemDecoration(dividerItemDecoration)
 
         // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
         // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
