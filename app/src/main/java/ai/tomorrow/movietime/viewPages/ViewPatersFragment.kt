@@ -28,12 +28,7 @@ class ViewPatersFragment: Fragment() {
 
         // Give the TabLayout the ViewPager
         val tabLayout = binding.slidingTabs
-//        tabLayout.setupWithViewPager(viewPager)
-
-
-        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.setOnTabSelectedListener(onTabSelectedListener)
-
+        tabLayout.setupWithViewPager(viewPager)
 
         return binding.root
     }
