@@ -1,8 +1,130 @@
 package ai.tomorrow.movietime.network
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
+
+
+data class Movie(
+    val id: Long,
+    val voteCount: String,
+    val voteAverage: Double,
+    val title: String,
+    val popularity: Double,
+    val posterPath: String?,
+    val backdropPath: String?,
+    val originalLanguage: String,
+    val overview: String,
+    val releaseDate: String,
+    var videoId: String? = null,
+    var videoKey: String? = null,
+    var videoName: String? = null,
+    var videoSite: String? = null,
+    var videoSize: Int? = null,
+    var videoType: String? = null
+)
+
+
+// Create the DatabaseEntities class, adding annotations for the class and the primary key.
+@Entity
+data class DatabaseMoive constructor(
+    @PrimaryKey
+    val id: Long,
+    val voteCount: String,
+    val voteAverage: Double,
+    val title: String,
+    val popularity: Double,
+    val posterPath: String?,
+    val backdropPath: String?,
+    val originalLanguage: String,
+    val overview: String,
+    val releaseDate: String,
+    var videoId: String?,
+    var videoKey: String?,
+    var videoName: String?,
+    var videoSite: String?,
+    var videoSize: Int?,
+    var videoType: String?
+)
+
+// Define extension function List<DatabaseVideo>.asDomainModel(), that returns a list of <Video>.
+fun List<Movie>.asDatabaseModel(): Array<DatabaseMoive> {
+    return map {
+        DatabaseMoive(
+            id = it.id,
+            voteCount = it.voteCount,
+            voteAverage = it.voteAverage,
+            title = it.title,
+            popularity = it.popularity,
+            posterPath = it.posterPath,
+            backdropPath = it.backdropPath,
+            originalLanguage = it.originalLanguage,
+            overview = it.overview,
+            releaseDate = it.releaseDate,
+            videoId = it.videoId,
+            videoKey = it.videoKey,
+            videoName = it.videoName,
+            videoSite = it.videoSite,
+            videoSize = it.videoSize,
+            videoType = it.videoType
+        )
+    }.toTypedArray()
+}
+
+// Define extension function List<DatabaseVideo>.asDomainModel(), that returns a list of <Video>.
+fun List<DatabaseMoive>.asDomainModel(): List<Movie> {
+    return map {
+        Movie(
+            id = it.id,
+            voteCount = it.voteCount,
+            voteAverage = it.voteAverage,
+            title = it.title,
+            popularity = it.popularity,
+            posterPath = it.posterPath,
+            backdropPath = it.backdropPath,
+            originalLanguage = it.originalLanguage,
+            overview = it.overview,
+            releaseDate = it.releaseDate,
+            videoId = it.videoId,
+            videoKey = it.videoKey,
+            videoName = it.videoName,
+            videoSite = it.videoSite,
+            videoSize = it.videoSize,
+            videoType = it.videoType
+            )
+    }
+}
+
+fun DatabaseMoive.insertNetworkVideo(videoNetwork: VideoNetwork){
+    videoId = videoNetwork.videoId
+    videoKey = videoNetwork.key
+    videoName = videoNetwork.name
+    videoSite = videoNetwork.site
+    videoSize = videoNetwork.size
+    videoType = videoNetwork.type
+}
+
+
+// Define extension function NetworkVideoHolder.asDatabaseModel(),
+// that returns an array of <DatabaseVideo>.
+fun MoviePage.asDomainModel(): List<Movie> {
+    return results.map {
+        Movie (
+            id = it.id,
+            voteCount = it.voteCount,
+            voteAverage = it.voteAverage,
+            title = it.title,
+            popularity = it.popularity,
+            posterPath = it.posterPath,
+            backdropPath = it.backdropPath,
+            originalLanguage = it.originalLanguage,
+            overview = it.overview,
+            releaseDate = it.releaseDate
+        )
+    }
+}
 
 
 data class MoviePage(
