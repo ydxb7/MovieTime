@@ -12,6 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
+            android:adjustViewBounds="true"
             android:padding="2dp"
             app:imageUrl="@{movie.posterPath}"
             tools:src="@tools:sample/backgrounds/scenic"/>
