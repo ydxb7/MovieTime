@@ -35,7 +35,7 @@ class OverviewFragment(val sort: String) : Fragment() {
 
         // Sets the adapter of the photosGrid RecyclerView with clickHandler lambda that
         // tells the viewModel when our property is clicked
-        binding.postersGrid.adapter = MoviePosterGridAdapter(MoviePosterGridAdapter.OnClickListener {
+        binding.postersGrid.adapter = MovieListAdapter(MovieListAdapter.OnClickListener {
             viewModel.displayPropertyDetails(it)
         })
 

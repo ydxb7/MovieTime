@@ -21,13 +21,12 @@
                 android:layout_height="0dp"
                 android:padding="6dp"
                 android:clipToPadding="false"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:listData="@{viewModel.properties}"
-                app:spanCount="2"
                 tools:itemCount="16"
                 tools:listitem="@layout/grid_view_item" />
 

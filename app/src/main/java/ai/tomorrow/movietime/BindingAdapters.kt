@@ -2,7 +2,7 @@ package ai.tomorrow.movietime
 
 import ai.tomorrow.movietime.network.MovieProperty
 import ai.tomorrow.movietime.overview.MovieApiStatus
-import ai.tomorrow.movietime.overview.MoviePosterGridAdapter
+import ai.tomorrow.movietime.overview.MovieListAdapter
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -23,7 +23,7 @@ private val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/"
  */
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<MovieProperty>?) {
-    val adapter = recyclerView.adapter as MoviePosterGridAdapter
+    val adapter = recyclerView.adapter as MovieListAdapter
     adapter.submitList(data)
 }
 
