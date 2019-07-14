@@ -5,6 +5,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -68,14 +69,14 @@ object MovieApi {
 }
 
 interface VideoApiService{
-    @GET("{movieId}/videoNetworks")
+    @GET("{movieId}/videos")
     fun getVideoResults(@Path("movieId") movieId: String, @Query("api_key") api_key: String):
-            Deferred<VideoResult>
+            Call<VideoResult>
 }
 
 private val retrofitVideo = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+//    .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .baseUrl(VIDEO_RESULT_URL)
     .build()
 

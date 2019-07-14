@@ -10,6 +10,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 enum class MovieApiStatus { LOADING, ERROR, DONE }
 
@@ -84,20 +88,14 @@ class OverviewViewModel(val sort: String) : ViewModel() {
                 val movieList = pageResult.asDomainModel()
                 Log.i("OverviewViewModel", "fetch movie list success!  ")
 
-//                movieList.map { movie ->
-//                    Log.i("OverviewViewModel", "movie.id = " + movie.id)
-//                    val getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(movie.id.toString(),
-//                            BuildConfig.MovieDb_ApiKey)
-//
-//                    val videoResults = getVideoResultsDeferred.await()
-//                    val videoNetworkList = videoResults.results
-//
-//                    if (videoNetworkList.size > 0){
-//                        movie.insertNetworkVideo(videoNetworkList[0])
-//                    }
-//                }
-
                 _status.value = MovieApiStatus.DONE
+                _properties.value = movieList
+
+                mutex.withLock {
+                    Log.i("OverviewViewModel", "fetch video list start!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                    getVideoResults(movieList)
+                    Log.i("OverviewViewModel", "fetch video list finish!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                }
                 _properties.value = movieList
 
             } catch (e: Exception) {
@@ -109,8 +107,34 @@ class OverviewViewModel(val sort: String) : ViewModel() {
 
         }
     }
-//
-//    fun getVideoResults(movieId: String): List<VideoNetwork>  {
+
+    companion object{
+        val mutex = Mutex()
+    }
+
+    suspend fun getVideoResults(movieList: List<Movie>){
+        withContext(Dispatchers.IO){
+            try {
+                movieList.map {
+                    Log.i("OverviewViewModel", "fetch video id = " + it.id)
+                    var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(it.id.toString(), BuildConfig.MovieDb_ApiKey)
+                    val videoResults = getVideoResultsDeferred.execute().body()
+                    if (videoResults != null && videoResults.results.size > 0){
+                        it.insertNetworkVideo(videoResults.results[0])
+                    }
+
+                    Log.i("OverviewViewModel", "fetch video id = " + it.id + " finish")
+                }
+            } catch (e: java.lang.Exception){
+                Log.i("OverviewViewModel", "fetch video error")
+            }
+        }
+    }
+
+
+
+
+//    fun getVideoResult(movieId: String): List<VideoNetwork>  {
 //        var videoNetworks: List<VideoNetwork> = ArrayList()
 //        coroutineScope.launch {
 //            // Get the Deferred object for our Retrofit request

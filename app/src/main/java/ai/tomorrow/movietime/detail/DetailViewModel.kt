@@ -67,8 +67,8 @@ class DetailViewModel(movieNetwork: Movie, app: Application) :
 
             try {
                 // this will run on a thread managed by Retrofit
-                val videoResults = getVideoResultsDeferred.await()
-                videoNetworks = videoResults.results
+//                val videoResults = getVideoResultsDeferred.await()
+//                videoNetworks = videoResults.results
 //                Log.i("DetailViewModel", "videoNetworks size = " + videoNetworks.size)
 
             } catch (e: Exception) {
