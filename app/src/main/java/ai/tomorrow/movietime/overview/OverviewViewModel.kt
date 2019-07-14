@@ -77,17 +77,28 @@ class OverviewViewModel(val sort: String) : ViewModel() {
             var getPropertiesDeferred = MovieApi.retrofitService.getMovieList(sort = sort, api_key = movieDb_ApiKey)
             Log.i("OverviewViewModel", "sort_by = " + sort)
 
-            var movieList: List<Movie>? = null
-
             try {
                 _status.value = MovieApiStatus.LOADING
                 // this will run on a thread managed by Retrofit
                 val pageResult = getPropertiesDeferred.await()
-                movieList = pageResult.asDomainModel()
+                val movieList = pageResult.asDomainModel()
                 Log.i("OverviewViewModel", "fetch movie list success!  ")
-//                Log.i("OverviewViewModel", "movieList = " + movieList)
-//                _status.value = MovieApiStatus.DONE
-//                _properties.value = movieList
+
+//                movieList.map { movie ->
+//                    Log.i("OverviewViewModel", "movie.id = " + movie.id)
+//                    val getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(movie.id.toString(),
+//                            BuildConfig.MovieDb_ApiKey)
+//
+//                    val videoResults = getVideoResultsDeferred.await()
+//                    val videoNetworkList = videoResults.results
+//
+//                    if (videoNetworkList.size > 0){
+//                        movie.insertNetworkVideo(videoNetworkList[0])
+//                    }
+//                }
+
+                _status.value = MovieApiStatus.DONE
+                _properties.value = movieList
 
             } catch (e: Exception) {
                 _status.value = MovieApiStatus.ERROR
@@ -96,42 +107,31 @@ class OverviewViewModel(val sort: String) : ViewModel() {
                 Log.i("OverviewViewModel", "" + e)
             }
 
-            movieList?.map { movie ->
-                val videoNetworkList = getVideoResults(movie.id.toString())
-                if (videoNetworkList.size > 0){
-                    movie.insertNetworkVideo(videoNetworkList[0])
-                }
-
-            }
-            _status.value = MovieApiStatus.DONE
-            _properties.value = movieList
-
-
         }
     }
-
-    fun getVideoResults(movieId: String): List<VideoNetwork>  {
-        var videoNetworks: List<VideoNetwork> = ArrayList()
-        coroutineScope.launch {
-            // Get the Deferred object for our Retrofit request
-            var getVideoResultsDeferred =
-                VideoApi.retrofitService.getVideoResults(movieId,
-                    BuildConfig.MovieDb_ApiKey
-                )
-
-            try {
-                // this will run on a thread managed by Retrofit
-                val videoResults = getVideoResultsDeferred.await()
-                videoNetworks = videoResults.results
-//                Log.i("DetailViewModel", "videoNetworks size = " + videoNetworks.size)
-
-            } catch (e: Exception) {
-                videoNetworks = ArrayList()
-                Log.i("DetailViewModel", "fetch video error")
-            }
-        }
-        return videoNetworks
-    }
+//
+//    fun getVideoResults(movieId: String): List<VideoNetwork>  {
+//        var videoNetworks: List<VideoNetwork> = ArrayList()
+//        coroutineScope.launch {
+//            // Get the Deferred object for our Retrofit request
+//            var getVideoResultsDeferred =
+//                VideoApi.retrofitService.getVideoResults(movieId,
+//                    BuildConfig.MovieDb_ApiKey
+//                )
+//
+//            try {
+//                // this will run on a thread managed by Retrofit
+//                val videoResults = getVideoResultsDeferred.await()
+//                videoNetworks = videoResults.results
+////                Log.i("DetailViewModel", "videoNetworks size = " + videoNetworks.size)
+//
+//            } catch (e: Exception) {
+//                videoNetworks = ArrayList()
+//                Log.i("DetailViewModel", "fetch video error")
+//            }
+//        }
+//        return videoNetworks
+//    }
 
 
 //

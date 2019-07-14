@@ -74,6 +74,8 @@ class DetailViewModel(movieNetwork: Movie, app: Application) :
             } catch (e: Exception) {
                 videoNetworks = ArrayList()
                 Log.i("DetailViewModel", "fetch video error")
+                Log.i("DetailViewModel", "" + e)
+
             }
             _hasFinishGetResults.value = true
         }
