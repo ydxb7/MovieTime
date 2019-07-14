@@ -1,5 +1,6 @@
 package ai.tomorrow.movietime
 
+import ai.tomorrow.movietime.network.Movie
 import ai.tomorrow.movietime.network.MovieNetwork
 import ai.tomorrow.movietime.overview.MovieApiStatus
 import ai.tomorrow.movietime.overview.MovieListAdapter
@@ -19,7 +20,7 @@ private val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/"
  * When there is no Mars property data (data is null), hide the [RecyclerView], otherwise show it.
  */
 @BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView, data: List<MovieNetwork>?) {
+fun bindRecyclerView(recyclerView: RecyclerView, data: List<Movie>?) {
     val adapter = recyclerView.adapter as MovieListAdapter
     adapter.submitList(data)
 }

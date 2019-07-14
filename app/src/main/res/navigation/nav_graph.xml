@@ -8,7 +8,7 @@
               android:label="DetailFragment">
         <argument
                 android:name="selectedMovie"
-                app:argType="ai.tomorrow.movietime.network.MovieNetwork"/>
+                app:argType="ai.tomorrow.movietime.network.Movie"/>
     </fragment>
     <fragment android:id="@+id/viewPatersFragment" android:name="ai.tomorrow.movietime.viewPages.ViewPatersFragment"
               android:label="ViewPatersFragment">

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
-
+@Parcelize
 data class Movie(
     val id: Long,
     val voteCount: String,
@@ -24,7 +24,7 @@ data class Movie(
     var videoSite: String? = null,
     var videoSize: Int? = null,
     var videoType: String? = null
-)
+) : Parcelable
 
 
 // Create the DatabaseEntities class, adding annotations for the class and the primary key.
@@ -97,7 +97,7 @@ fun List<DatabaseMoive>.asDomainModel(): List<Movie> {
     }
 }
 
-fun DatabaseMoive.insertNetworkVideo(videoNetwork: VideoNetwork){
+fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork){
     videoId = videoNetwork.videoId
     videoKey = videoNetwork.key
     videoName = videoNetwork.name
@@ -156,12 +156,12 @@ data class MovieNetwork(
 
 
 data class VideoNetwork(
-    @Json(name = "id") val videoId: String,
-    val key: String,
-    val name: String,
-    val site: String,
-    val size: Int,
-    val type: String
+    @Json(name = "id") val videoId: String?,
+    val key: String?,
+    val name: String?,
+    val site: String?,
+    val size: Int?,
+    val type: String?
 )
 
 data class VideoResult(

@@ -2,6 +2,7 @@ package ai.tomorrow.movietime.detail
 
 import ai.tomorrow.movietime.BuildConfig
 import ai.tomorrow.movietime.BuildConfig.MovieDb_ApiKey
+import ai.tomorrow.movietime.network.Movie
 import ai.tomorrow.movietime.network.MovieNetwork
 import ai.tomorrow.movietime.network.VideoNetwork
 import ai.tomorrow.movietime.network.VideoApi
@@ -21,18 +22,18 @@ import kotlinx.coroutines.launch
 
 /**
  *  The [ViewModel] associated with the [DetailFragment], containing information about the selected
- *  [MovieNetwork].
+ *  [Movie].
  */
 
 private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 
 //, YouTubePlayer.OnInitializedListener
-class DetailViewModel(movieNetwork: MovieNetwork, app: Application) :
+class DetailViewModel(movieNetwork: Movie, app: Application) :
     AndroidViewModel(app) {
-    private val _selectedMovie = MutableLiveData<MovieNetwork>()
+    private val _selectedMovie = MutableLiveData<Movie>()
 
     // The external LiveData for the selectedMovie
-    val selectedMovie: LiveData<MovieNetwork>
+    val selectedMovie: LiveData<Movie>
         get() = _selectedMovie
 
     private val _hasFinishGetResults = MutableLiveData<Boolean>()

@@ -12,7 +12,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 enum class MovieApiStatus { LOADING, ERROR, DONE }
+
 val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
+
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
@@ -27,10 +29,10 @@ class OverviewViewModel(val sort: String) : ViewModel() {
         get() = _status
 
     // Internally, we use a MutableLiveData, because we will be updating the List of MovieNetwork with new values
-    private val _properties = MutableLiveData<List<MovieNetwork>>()
+    private val _properties = MutableLiveData<List<Movie>>()
 
     // The external LiveData interface to the property is immutable, so only this class can modify
-    val properties: LiveData<List<MovieNetwork>>
+    val properties: LiveData<List<Movie>>
         get() = _properties
 
 //    private val _movieList = MutableLiveData<List<String>>()
@@ -40,10 +42,10 @@ class OverviewViewModel(val sort: String) : ViewModel() {
 
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
-    private val _navigateToSelectedMovie = MutableLiveData<MovieNetwork>()
+    private val _navigateToSelectedMovie = MutableLiveData<Movie>()
 
     // The external immutable LiveData for the navigation property
-    val navigateToSelectedMovie: LiveData<MovieNetwork>
+    val navigateToSelectedMovie: LiveData<Movie>
         get() = _navigateToSelectedMovie
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -61,6 +63,9 @@ class OverviewViewModel(val sort: String) : ViewModel() {
     }
 
 
+
+
+
     /**
      * Gets Movies property information from the Movie API Retrofit service and updates the
      * [MovieNetwork] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
@@ -69,26 +74,65 @@ class OverviewViewModel(val sort: String) : ViewModel() {
     private fun getMoviesProperties() {
         coroutineScope.launch {
             // Get the Deferred object for our Retrofit request
-            var getPropertiesDeferred = MovieApi.retrofitService.getMovieList(sort=sort, api_key=movieDb_ApiKey)
+            var getPropertiesDeferred = MovieApi.retrofitService.getMovieList(sort = sort, api_key = movieDb_ApiKey)
             Log.i("OverviewViewModel", "sort_by = " + sort)
 
+            var movieList: List<Movie>? = null
 
             try {
                 _status.value = MovieApiStatus.LOADING
                 // this will run on a thread managed by Retrofit
                 val pageResult = getPropertiesDeferred.await()
-                _status.value = MovieApiStatus.DONE
-                _properties.value = pageResult.results
-                Log.i("OverviewViewModel", "fetch movie list success!  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-                Log.i("OverviewViewModel", "pageResult = " + pageResult)
+                movieList = pageResult.asDomainModel()
+                Log.i("OverviewViewModel", "fetch movie list success!  ")
+//                Log.i("OverviewViewModel", "movieList = " + movieList)
+//                _status.value = MovieApiStatus.DONE
+//                _properties.value = movieList
+
             } catch (e: Exception) {
                 _status.value = MovieApiStatus.ERROR
                 _properties.value = ArrayList()
                 Log.i("OverviewViewModel", "fetch movie list error!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 Log.i("OverviewViewModel", "" + e)
             }
+
+            movieList?.map { movie ->
+                val videoNetworkList = getVideoResults(movie.id.toString())
+                if (videoNetworkList.size > 0){
+                    movie.insertNetworkVideo(videoNetworkList[0])
+                }
+
+            }
+            _status.value = MovieApiStatus.DONE
+            _properties.value = movieList
+
+
         }
     }
+
+    fun getVideoResults(movieId: String): List<VideoNetwork>  {
+        var videoNetworks: List<VideoNetwork> = ArrayList()
+        coroutineScope.launch {
+            // Get the Deferred object for our Retrofit request
+            var getVideoResultsDeferred =
+                VideoApi.retrofitService.getVideoResults(movieId,
+                    BuildConfig.MovieDb_ApiKey
+                )
+
+            try {
+                // this will run on a thread managed by Retrofit
+                val videoResults = getVideoResultsDeferred.await()
+                videoNetworks = videoResults.results
+//                Log.i("DetailViewModel", "videoNetworks size = " + videoNetworks.size)
+
+            } catch (e: Exception) {
+                videoNetworks = ArrayList()
+                Log.i("DetailViewModel", "fetch video error")
+            }
+        }
+        return videoNetworks
+    }
+
 
 //
 //    fun onSortChanged(sortTag: String, isChecked: Boolean) {
@@ -101,8 +145,8 @@ class OverviewViewModel(val sort: String) : ViewModel() {
      * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
      * @param marsProperty The [MarsProperty] that was clicked on.
      */
-    fun displayPropertyDetails(movieNetwork: MovieNetwork) {
-        _navigateToSelectedMovie.value = movieNetwork
+    fun displayPropertyDetails(movie: Movie) {
+        _navigateToSelectedMovie.value = movie
     }
 
     /**

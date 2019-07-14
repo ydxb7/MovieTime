@@ -1,6 +1,7 @@
 package ai.tomorrow.movietime.overview
 
 import ai.tomorrow.movietime.databinding.GridViewItemBinding
+import ai.tomorrow.movietime.network.Movie
 import ai.tomorrow.movietime.network.MovieNetwork
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,18 +10,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 class MovieListAdapter( val onClickListener: OnClickListener ) :
-    ListAdapter<MovieNetwork, MovieListAdapter.MovieViewHolder>(DiffCallback) {
+    ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(DiffCallback) {
 
     /**
-     * Allows the RecyclerView to determine which items have changed when the [List] of [MovieNetwork]
+     * Allows the RecyclerView to determine which items have changed when the [List] of [Movie]
      * has been updated.
      */
-    companion object DiffCallback : DiffUtil.ItemCallback<MovieNetwork>() {
-        override fun areItemsTheSame(oldItem: MovieNetwork, newItem: MovieNetwork): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: MovieNetwork, newItem: MovieNetwork): Boolean {
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
         }
     }
@@ -31,8 +32,8 @@ class MovieListAdapter( val onClickListener: OnClickListener ) :
      */
     class MovieViewHolder(private var binding: GridViewItemBinding):
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(movieNetwork: MovieNetwork) {
-            binding.movie = movieNetwork
+        fun bind(movie: Movie) {
+            binding.movie = movie
             // This is important, because it forces the data binding to execute immediately,
             // which allows the RecyclerView to make the correct view size measurements
             binding.executePendingBindings()
@@ -56,11 +57,11 @@ class MovieListAdapter( val onClickListener: OnClickListener ) :
      * Replaces the contents of a view (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movieProperty = getItem(position)
+        val movie = getItem(position)
         holder.itemView.setOnClickListener {
-            onClickListener.onClick(movieProperty)
+            onClickListener.onClick(movie)
         }
-        holder.bind(movieProperty)
+        holder.bind(movie)
     }
 
     /**
@@ -68,7 +69,7 @@ class MovieListAdapter( val onClickListener: OnClickListener ) :
      * associated with the current item to the [onClick] function.
      * @param clickListener lambda that will be called with the current [MovieNetwork]
      */
-    class OnClickListener(val clickListener: (movieNetwork: MovieNetwork) -> Unit) {
-        fun onClick(movieNetwork: MovieNetwork) = clickListener(movieNetwork)
+    class OnClickListener(val clickListener: (movie: Movie) -> Unit) {
+        fun onClick(movie: Movie) = clickListener(movie)
     }
 }
