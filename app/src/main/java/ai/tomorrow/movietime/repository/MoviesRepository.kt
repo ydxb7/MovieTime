@@ -20,8 +20,13 @@ class MoviesRepository(private val database: MoviesDatabase, val sort: String) {
     /**
      * A playlist of videos that can be shown on the screen.
      */
-    val movies: LiveData<List<Movie>> =
-        Transformations.map(database.movieDao.getMovies(sort)) {
+    val movies_popular: LiveData<List<Movie>> =
+        Transformations.map(database.movieDao.getMovies_popularity()) {
+            it.asDomainModel()
+        }
+
+    val movies_rate: LiveData<List<Movie>> =
+        Transformations.map(database.movieDao.getMovies_rate()) {
             it.asDomainModel()
         }
 

@@ -1,7 +1,10 @@
 package ai.tomorrow.movietime.overview
 
 import ai.tomorrow.movietime.BuildConfig
+import ai.tomorrow.movietime.database.getDatabase
 import ai.tomorrow.movietime.network.*
+import ai.tomorrow.movietime.repository.MoviesRepository
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,11 +21,11 @@ import kotlinx.coroutines.sync.withLock
 enum class MovieApiStatus { LOADING, ERROR, DONE }
 
 val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
-
+val movieSortMap = mapOf("popular" to "popularity", "top_rated" to "vote_average")
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
-class OverviewViewModel(val sort: String) : ViewModel() {
+class OverviewViewModel(val sort: String, application: Application) : ViewModel() {
 //    private var sort = SortHolder()
 
     // The internal MutableLiveData that stores the status of the most recent request
@@ -32,19 +35,6 @@ class OverviewViewModel(val sort: String) : ViewModel() {
     val status: LiveData<MovieApiStatus>
         get() = _status
 
-    // Internally, we use a MutableLiveData, because we will be updating the List of MovieNetwork with new values
-    private val _properties = MutableLiveData<List<Movie>>()
-
-    // The external LiveData interface to the property is immutable, so only this class can modify
-    val properties: LiveData<List<Movie>>
-        get() = _properties
-
-//    private val _movieList = MutableLiveData<List<String>>()
-////
-//    val movieList: LiveData<List<String>>
-//        get() = _movieList
-
-
     // Internally, we use a MutableLiveData to handle navigation to the selected property
     private val _navigateToSelectedMovie = MutableLiveData<Movie>()
 
@@ -52,115 +42,51 @@ class OverviewViewModel(val sort: String) : ViewModel() {
     val navigateToSelectedMovie: LiveData<Movie>
         get() = _navigateToSelectedMovie
 
-    // Create a Coroutine scope using a job to be able to cancel when needed
-    private var viewModelJob = Job()
+    /**
+     * This is the job for all coroutines started by this ViewModel.
+     *
+     * Cancelling this job will cancel all coroutines started by this ViewModel.
+     */
+    private val viewModelJob = SupervisorJob()
 
     // the Coroutine runs using the Main (UI) dispatcher
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    /**
-     * Call getMoviesProperties() on init so we can display status immediately.
-     */
+    // Create a database variable and assign it to  getDatabase(), passing the application.
+    private val database = getDatabase(application)
+
+    // Define a moviesRepositor by calling the constructor and passing in the database.
+    private val moviesRepository = MoviesRepository(database, movieSortMap[sort]!!)
+
+    // Internally, we use a MutableLiveData to handle navigation to the selected property
+//    private val _movieList = MutableLiveData<List<Movie>>()
+
+    // The external immutable LiveData for the navigation property
+    lateinit var movieList: LiveData<List<Movie>>
+//        get() = _movieList
+
+    // Create an init block and launch a coroutine to call videosRepository.refreshVideos().
     init {
-//        _movieList.value = movieSortList
-//        getMoviesProperties()
-        coroutineScope.launch {
-            val movieList = fetchMovieOnline(sort).await()
-            _properties.value = movieList
+        _status.value = MovieApiStatus.LOADING
+        // Get videos from the repository and assign it to a playlist variable.
+
+        Log.i("OverviewViewModel", "sort = " +  sort)
+        movieList = when(sort){
+            "popular" -> moviesRepository.movies_popular
+            "top_rated" -> moviesRepository.movies_rate
+            else -> throw IllegalArgumentException("sort name wrong")
+        }
+
+        _status.value = MovieApiStatus.DONE
+
+        viewModelScope.launch {
+            // 因为这是 suspend function，所以要用launch
+            moviesRepository.refreshMovies(sort)
         }
     }
 
 
-//    /**
-//     * Gets Movies property information from the Movie API Retrofit service and updates the
-//     * [MovieNetwork] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
-//     * coroutine Deferred, which we await to get the result of the transaction.
-//     */
-//    private fun getMoviesProperties() {
-//        coroutineScope.launch {
-//            // Get the Deferred object for our Retrofit request
-//            var getPropertiesDeferred = MovieApi.retrofitService.getMovieList(sort = sort, api_key = movieDb_ApiKey)
-//            Log.i("OverviewViewModel", "sort_by = " + sort)
-//
-//            try {
-//                _status.value = MovieApiStatus.LOADING
-//                // this will run on a thread managed by Retrofit
-//                val pageResult = getPropertiesDeferred.await()
-//                val movieList = pageResult.asDomainModel()
-//                Log.i("OverviewViewModel", "fetch movie list success!  ")
-//
-//                _status.value = MovieApiStatus.DONE
-//                _properties.value = movieList
-//
-//                mutex.withLock {
-//                    getVideoResults(movieList)
-//                }
-//                _properties.value = movieList
-//
-//            } catch (e: Exception) {
-//                _status.value = MovieApiStatus.ERROR
-//                _properties.value = ArrayList()
-//                Log.i("OverviewViewModel", "fetch movie list error!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-//                Log.i("OverviewViewModel", "" + e)
-//            }
-//
-//        }
-//    }
-//
-//    companion object{
-//        val mutex = Mutex()
-//    }
-//
-//    suspend fun getVideoResults(movieList: List<Movie>){
-//        withContext(Dispatchers.IO){
-//            try {
-//                movieList.map {
-//                    var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(it.id.toString(), BuildConfig.MovieDb_ApiKey)
-//                    val videoResults = getVideoResultsDeferred.execute().body()
-//                    if (videoResults != null && videoResults.results.size > 0){
-//                        it.insertNetworkVideo(videoResults.results[0])
-//                        it.hasVideo = true
-//                    }
-//                }
-//                Log.i("OverviewViewModel", "fetch video correct")
-//            } catch (e: java.lang.Exception){
-//                Log.i("OverviewViewModel", "fetch video error")
-//            }
-//        }
-//    }
 
-
-//    fun getVideoResult(movieId: String): List<VideoNetwork>  {
-//        var videoNetworks: List<VideoNetwork> = ArrayList()
-//        coroutineScope.launch {
-//            // Get the Deferred object for our Retrofit request
-//            var getVideoResultsDeferred =
-//                VideoApi.retrofitService.getVideoResults(movieId,
-//                    BuildConfig.MovieDb_ApiKey
-//                )
-//
-//            try {
-//                // this will run on a thread managed by Retrofit
-//                val videoResults = getVideoResultsDeferred.await()
-//                videoNetworks = videoResults.results
-////                Log.i("DetailViewModel", "videoNetworks size = " + videoNetworks.size)
-//
-//            } catch (e: Exception) {
-//                videoNetworks = ArrayList()
-//                Log.i("DetailViewModel", "fetch video error")
-//            }
-//        }
-//        return videoNetworks
-//    }
-
-
-//
-//    fun onSortChanged(sortTag: String, isChecked: Boolean) {
-//        if (isChecked){
-//            Log.i("OverviewViewModel", "sortTag = " + sortTag)
-//            getMoviesProperties(movieSortMap[sortTag]!!)
-//        }
-//    }
     /**
      * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
      * @param marsProperty The [MarsProperty] that was clicked on.

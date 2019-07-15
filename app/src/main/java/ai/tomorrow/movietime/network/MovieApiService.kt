@@ -31,12 +31,9 @@ enum class MovieApiSort(val value: String) {
     UPCOMING("upcoming"), NOW_PLAYING("now_playing")
 }
 
-val movieSortList = listOf<String>("popular", "top_rated", "upcoming")
+val movieSortList = listOf<String>("popular", "top_rated")
 //val movieSortList = listOf<String>( "popular", "top_rated", "upcoming", "now_playing")
-val movieSortMap = mapOf(
-    "popular" to MovieApiSort.POPULAR, "top_rated" to MovieApiSort.TOP_TATED,
-    "upcoming" to MovieApiSort.UPCOMING, "now_playing" to MovieApiSort.NOW_PLAYING
-)
+
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -106,7 +103,7 @@ val coroutineScope = CoroutineScope(job + Dispatchers.IO)
 
 val mutex = Mutex()
 
-suspend fun getVideoResults(movieList: List<Movie>) {
+suspend fun fetchVideo(movieList: List<Movie>) {
     try {
         movieList.map {
             var getVideoResultsDeferred =
@@ -129,7 +126,7 @@ suspend fun getVideoResults(movieList: List<Movie>) {
  * [MovieNetwork] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
  * coroutine Deferred, which we await to get the result of the transaction.
  */
-suspend fun getMovies(sort: String): List<Movie> {
+suspend fun fetchMoviesList(sort: String): List<Movie> {
 
     // Get the Deferred object for our Retrofit request
     var getPropertiesDeferred =
@@ -143,7 +140,7 @@ suspend fun getMovies(sort: String): List<Movie> {
         Log.i("MovieApiService", "fetch movie list success!  ")
 
         mutex.withLock {
-            getVideoResults(movieList)
+            fetchVideo(movieList)
         }
         return movieList
 
@@ -156,6 +153,6 @@ suspend fun getMovies(sort: String): List<Movie> {
 
 
 fun fetchMovieOnline(sort: String): Deferred<List<Movie>> {
-    val result = coroutineScope.async { getMovies(sort) }
+    val result = coroutineScope.async { fetchMoviesList(sort) }
     return result
 }

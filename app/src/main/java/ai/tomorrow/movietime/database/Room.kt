@@ -9,8 +9,13 @@ import androidx.room.*
 @Dao
 interface MovieDao {
     // Add SQL @Query getMovies() function that returns a List of DatabaseVideo.
-    @Query("select * from databaseMoive" + " ORDER BY :sort DESC")
-    fun getMovies(sort: String): LiveData<List<DatabaseMoive>>
+    @Query("select * from databaseMoive" + " ORDER BY popularity DESC LIMIT 20")
+    fun getMovies_popularity(): LiveData<List<DatabaseMoive>>
+
+    // Add SQL @Query getMovies() function that returns a List of DatabaseVideo.
+    @Query("select * from databaseMoive" + " ORDER BY voteAverage DESC LIMIT 20")
+    fun getMovies_rate(): LiveData<List<DatabaseMoive>>
+
 
     // Add SQL @Insert insertAll() that replaces on conflict (or upsert).
     @Insert(onConflict = OnConflictStrategy.REPLACE)

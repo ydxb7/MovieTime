@@ -27,12 +27,13 @@ class OverviewFragment(val sort: String) : Fragment() {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        val application = requireNotNull(activity).application
         val binding = FragmentOverviewBinding.inflate(inflater)
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.setLifecycleOwner(this)
 
-        val viewModelFactory = OverviewViewModelFactory(sort)
+        val viewModelFactory = OverviewViewModelFactory(sort, application)
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(OverviewViewModel::class.java)
 
         // Giving the binding access to the OverviewViewModel
