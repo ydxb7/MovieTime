@@ -44,27 +44,6 @@ class DetailFragment : Fragment() {
             youTubePlayerFragment.view.visibility = View.GONE
         }
 
-
-
-//        viewModel.hasFinishGetResults.observe(this, Observer {
-//
-////            Log.i("DetailFragment", " viewModel.videoNetworks.size = " + viewModel.videoNetworks.size)
-////            Log.i("DetailFragment", " hasFinishGetResults = " + it)
-//            if (it){
-//                if (viewModel.videoNetworks.size > 0){
-////                    Log.i("DetailFragment", " youTubePlayerFragment.initialize  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" )
-//                    youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
-////                    viewModel.finishGetResult()
-//                }
-//                else{
-//                    youTubePlayerFragment.view.visibility = View.GONE
-//                    moive_poster.visibility = View.VISIBLE
-//                }
-////                viewModel.finishGetResult()
-//            }
-////
-//        })
-
         return binding.root
     }
 

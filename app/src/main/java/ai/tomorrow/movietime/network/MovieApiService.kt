@@ -159,10 +159,6 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
     var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
 
-    Log.i("MovieApiService", "date_now.format(formatter) = " + date_now.format(formatter))
-    Log.i("MovieApiService", "date_plus20.format(formatter) = " + date_plus20.format(formatter))
-    Log.i("MovieApiService", "date_minus20.format(formatter) = " + date_minus20.format(formatter))
-
     var getPropertiesDeferred = when (movieType) {
         // Get the Deferred object for our Retrofit request
         "popular" -> MovieApi.retrofitService.getMovieList(
@@ -203,8 +199,6 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
         val movieList = pageResult?.asDomainModel() ?: ArrayList()
         Log.i("MovieApiService", "sort_by = " + movieType)
         Log.i("MovieApiService", "fetch movie list success!  ")
-        Log.i("MovieApiService", "movieList = " + movieList)
-
         mutex.withLock {
             fetchVideo(movieList)
         }
