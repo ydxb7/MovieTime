@@ -26,12 +26,17 @@ private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/"
 
 private const val BASE_URL = "https://mars.udacity.com/"
 
-enum class MovieApiSort(val value: String){POPULAR("popular"), TOP_TATED("top_rated"),
-    UPCOMING("upcoming"), NOW_PLAYING("now_playing")}
-val movieSortList = listOf<String>( "popular", "top_rated", "upcoming")
+enum class MovieApiSort(val value: String) {
+    POPULAR("popular"), TOP_TATED("top_rated"),
+    UPCOMING("upcoming"), NOW_PLAYING("now_playing")
+}
+
+val movieSortList = listOf<String>("popular", "top_rated", "upcoming")
 //val movieSortList = listOf<String>( "popular", "top_rated", "upcoming", "now_playing")
-val movieSortMap = mapOf("popular" to MovieApiSort.POPULAR, "top_rated" to MovieApiSort.TOP_TATED,
-    "upcoming" to MovieApiSort.UPCOMING, "now_playing" to MovieApiSort.NOW_PLAYING)
+val movieSortMap = mapOf(
+    "popular" to MovieApiSort.POPULAR, "top_rated" to MovieApiSort.TOP_TATED,
+    "upcoming" to MovieApiSort.UPCOMING, "now_playing" to MovieApiSort.NOW_PLAYING
+)
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -76,7 +81,7 @@ object MovieApi {
     val retrofitService: MovieApiService by lazy { retrofitMovie.create(MovieApiService::class.java) }
 }
 
-interface VideoApiService{
+interface VideoApiService {
     @GET("{movieId}/videos")
     fun getVideoResults(@Path("movieId") movieId: String, @Query("api_key") api_key: String):
             Call<VideoResult>
@@ -88,10 +93,9 @@ private val retrofitVideo = Retrofit.Builder()
     .baseUrl(VIDEO_RESULT_URL)
     .build()
 
-object VideoApi{
+object VideoApi {
     val retrofitService: VideoApiService by lazy { retrofitVideo.create(VideoApiService::class.java) }
 }
-
 
 
 // Create a Coroutine scope using a job to be able to cancel when needed
@@ -102,22 +106,21 @@ val coroutineScope = CoroutineScope(job + Dispatchers.IO)
 
 val mutex = Mutex()
 
-suspend fun getVideoResults(movieList: List<Movie>){
-    withContext(Dispatchers.IO){
-        try {
-            movieList.map {
-                var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(it.id.toString(), BuildConfig.MovieDb_ApiKey)
-                val videoResults = getVideoResultsDeferred.execute().body()
-                if (videoResults != null && videoResults.results.size > 0){
-                    it.insertNetworkVideo(videoResults.results[0])
-                    it.hasVideo = true
-                }
+suspend fun getVideoResults(movieList: List<Movie>) {
+    try {
+        movieList.map {
+            var getVideoResultsDeferred =
+                VideoApi.retrofitService.getVideoResults(it.id.toString(), BuildConfig.MovieDb_ApiKey)
+            val videoResults = getVideoResultsDeferred.execute().body()
+            if (videoResults != null && videoResults.results.size > 0) {
+                it.insertNetworkVideo(videoResults.results[0])
+                it.hasVideo = true
             }
-            Log.i("MovieApiService", "fetch video correct")
-        } catch (e: Exception){
-            Log.i("MovieApiService", "fetch video error")
-            Log.i("MovieApiService", "" + e)
         }
+        Log.i("MovieApiService", "fetch video correct")
+    } catch (e: Exception) {
+        Log.i("MovieApiService", "fetch video error")
+        Log.i("MovieApiService", "" + e)
     }
 }
 
@@ -128,30 +131,31 @@ suspend fun getVideoResults(movieList: List<Movie>){
  */
 suspend fun getMovies(sort: String): List<Movie> {
 
-        // Get the Deferred object for our Retrofit request
-        var getPropertiesDeferred = MovieApi.retrofitService.getMovieList(sort = sort, api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey)
-        Log.i("MovieApiService", "sort_by = " + sort)
+    // Get the Deferred object for our Retrofit request
+    var getPropertiesDeferred =
+        MovieApi.retrofitService.getMovieList(sort = sort, api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey)
+    Log.i("MovieApiService", "sort_by = " + sort)
 
-        try {
-            // this will run on a thread managed by Retrofit
-            val pageResult = getPropertiesDeferred.execute().body()
-            val movieList = pageResult?.asDomainModel() ?: ArrayList()
-            Log.i("MovieApiService", "fetch movie list success!  ")
+    try {
+        // this will run on a thread managed by Retrofit
+        val pageResult = getPropertiesDeferred.execute().body()
+        val movieList = pageResult?.asDomainModel() ?: ArrayList()
+        Log.i("MovieApiService", "fetch movie list success!  ")
 
-            mutex.withLock {
-                getVideoResults(movieList)
-            }
-            return movieList
-
-        } catch (e: Exception) {
-            Log.i("MovieApiService", "fetch movie list error!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            Log.i("MovieApiService", "" + e)
-            return ArrayList()
+        mutex.withLock {
+            getVideoResults(movieList)
         }
+        return movieList
+
+    } catch (e: Exception) {
+        Log.i("MovieApiService", "fetch movie list error!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        Log.i("MovieApiService", "" + e)
+        return ArrayList()
+    }
 }
 
 
-fun fetchMovieOnline(sort: String): Deferred<List<Movie>>{
+fun fetchMovieOnline(sort: String): Deferred<List<Movie>> {
     val result = coroutineScope.async { getMovies(sort) }
     return result
 }
