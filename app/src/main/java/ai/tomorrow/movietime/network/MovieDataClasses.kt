@@ -47,7 +47,8 @@ data class DatabaseMoive constructor(
     var videoName: String?,
     var videoSite: String?,
     var videoSize: Int?,
-    var videoType: String?
+    var videoType: String?,
+    var hasVideo: Boolean
 )
 
 // Define extension function List<DatabaseVideo>.asDomainModel(), that returns a list of <Video>.
@@ -69,7 +70,8 @@ fun List<Movie>.asDatabaseModel(): Array<DatabaseMoive> {
             videoName = it.videoName,
             videoSite = it.videoSite,
             videoSize = it.videoSize,
-            videoType = it.videoType
+            videoType = it.videoType,
+            hasVideo = it.hasVideo
         )
     }.toTypedArray()
 }
@@ -93,7 +95,8 @@ fun List<DatabaseMoive>.asDomainModel(): List<Movie> {
             videoName = it.videoName,
             videoSite = it.videoSite,
             videoSize = it.videoSize,
-            videoType = it.videoType
+            videoType = it.videoType,
+            hasVideo = it.hasVideo
             )
     }
 }
