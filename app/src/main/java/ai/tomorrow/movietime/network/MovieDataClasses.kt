@@ -9,21 +9,22 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Movie(
     val id: Long,
-    val voteCount: String,
-    val voteAverage: Double,
+    val voteCount: String?,
+    val voteAverage: Double?,
     val title: String,
-    val popularity: Double,
+    val popularity: Double?,
     val posterPath: String?,
     val backdropPath: String?,
-    val originalLanguage: String,
-    val overview: String,
-    val releaseDate: String,
+    val originalLanguage: String?,
+    val overview: String?,
+    val releaseDate: String?,
     var videoId: String? = null,
     var videoKey: String? = null,
     var videoName: String? = null,
     var videoSite: String? = null,
     var videoSize: Int? = null,
-    var videoType: String? = null
+    var videoType: String? = null,
+    var hasVideo: Boolean = false
 ) : Parcelable
 
 
@@ -32,15 +33,15 @@ data class Movie(
 data class DatabaseMoive constructor(
     @PrimaryKey
     val id: Long,
-    val voteCount: String,
-    val voteAverage: Double,
+    val voteCount: String?,
+    val voteAverage: Double?,
     val title: String,
-    val popularity: Double,
+    val popularity: Double?,
     val posterPath: String?,
     val backdropPath: String?,
-    val originalLanguage: String,
-    val overview: String,
-    val releaseDate: String,
+    val originalLanguage: String?,
+    val overview: String?,
+    val releaseDate: String?,
     var videoId: String?,
     var videoKey: String?,
     var videoName: String?,

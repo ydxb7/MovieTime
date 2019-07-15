@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.youtube.player.YouTubePlayerFragment
 
 const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 private val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/"
@@ -31,7 +32,7 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<Movie>?) {
  */
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, posterPath: String?) {
-    if (posterPath == null){
+    if (posterPath == null) {
         imgView.setImageResource(R.drawable.ic_connection_error)
     } else {
         val imgUri = IMAGE_BASE_URL.toUri().buildUpon().scheme("https").appendPath(posterPath).build()
@@ -66,6 +67,30 @@ fun bindStatus(statusImageView: ImageView, status: MovieApiStatus?) {
         }
         MovieApiStatus.DONE -> {
             statusImageView.visibility = View.GONE
+        }
+    }
+}
+
+
+@BindingAdapter(value = *arrayOf("showImage", "imagePath"), requireAll = false)
+fun showImage(imageView: ImageView, hasVideo: Boolean, imagePath: String?) {
+    if (hasVideo) {
+        imageView.visibility = View.GONE
+    } else {
+        if (imagePath == null) {
+            imageView.setImageResource(R.drawable.ic_connection_error)
+        } else {
+            imageView.visibility = View.VISIBLE
+            val imgUri = IMAGE_BASE_URL.toUri().buildUpon().scheme("https").appendPath(imagePath).build()
+            Glide.with(imageView.context)
+                .load(imgUri)
+                .apply(
+                    RequestOptions()
+                        .placeholder(R.drawable.loading_animation)
+                        .error(R.drawable.ic_broken_image)
+                        .transforms(RoundedCorners(20))
+                )
+                .into(imageView)
         }
     }
 }

@@ -28,59 +28,8 @@ import kotlinx.coroutines.launch
 private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 
 //, YouTubePlayer.OnInitializedListener
-class DetailViewModel(movieNetwork: Movie, app: Application) :
+class DetailViewModel(val movie: Movie, app: Application) :
     AndroidViewModel(app) {
-    private val _selectedMovie = MutableLiveData<Movie>()
-
-    // The external LiveData for the selectedMovie
-    val selectedMovie: LiveData<Movie>
-        get() = _selectedMovie
-
-    private val _hasFinishGetResults = MutableLiveData<Boolean>()
-    val hasFinishGetResults: LiveData<Boolean>
-        get() = _hasFinishGetResults
-
-
-    // Initialize the _selectedMovie MutableLiveData
-    init {
-        _selectedMovie.value = movieNetwork
-    }
-
-    // Create a Coroutine scope using a job to be able to cancel when needed
-    private var viewModelJob = Job()
-
-    // the Coroutine runs using the Main (UI) dispatcher
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
-    var videoNetworks: List<VideoNetwork> = ArrayList()
-
-
-    init {
-        getVideoResults()
-    }
-
-    fun getVideoResults() {
-        coroutineScope.launch {
-            // Get the Deferred object for our Retrofit request
-            var getVideoResultsDeferred =
-                VideoApi.retrofitService.getVideoResults(selectedMovie.value!!.id.toString(), MovieDb_ApiKey)
-
-            try {
-                // this will run on a thread managed by Retrofit
-//                val videoResults = getVideoResultsDeferred.await()
-//                videoNetworks = videoResults.results
-//                Log.i("DetailViewModel", "videoNetworks size = " + videoNetworks.size)
-
-            } catch (e: Exception) {
-                videoNetworks = ArrayList()
-                Log.i("DetailViewModel", "fetch video error")
-                Log.i("DetailViewModel", "" + e)
-
-            }
-            _hasFinishGetResults.value = true
-        }
-    }
-
 
     val onInitializedListener = object : YouTubePlayer.OnInitializedListener {
         override fun onInitializationSuccess(
@@ -89,8 +38,8 @@ class DetailViewModel(movieNetwork: Movie, app: Application) :
             wasRestored: Boolean
         ) {
             if (!wasRestored) {
-                if (videoNetworks.size > 0) {
-                    youTubePlayer.cueVideo(videoNetworks[0].key)
+                if (movie.hasVideo) {
+                    youTubePlayer.cueVideo(movie.videoKey)
                 } else {
                     youTubePlayer.cueVideo("V38cLTYYXNw")
                 }
@@ -103,16 +52,6 @@ class DetailViewModel(movieNetwork: Movie, app: Application) :
         ) {
 
         }
-    }
-
-    fun finishGetResult() {
-        _hasFinishGetResults.value = false
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        finishGetResult()
-        viewModelJob.cancel()
     }
 
 

@@ -92,9 +92,7 @@ class OverviewViewModel(val sort: String) : ViewModel() {
                 _properties.value = movieList
 
                 mutex.withLock {
-                    Log.i("OverviewViewModel", "fetch video list start!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                     getVideoResults(movieList)
-                    Log.i("OverviewViewModel", "fetch video list finish!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 }
                 _properties.value = movieList
 
@@ -116,15 +114,14 @@ class OverviewViewModel(val sort: String) : ViewModel() {
         withContext(Dispatchers.IO){
             try {
                 movieList.map {
-                    Log.i("OverviewViewModel", "fetch video id = " + it.id)
                     var getVideoResultsDeferred = VideoApi.retrofitService.getVideoResults(it.id.toString(), BuildConfig.MovieDb_ApiKey)
                     val videoResults = getVideoResultsDeferred.execute().body()
                     if (videoResults != null && videoResults.results.size > 0){
                         it.insertNetworkVideo(videoResults.results[0])
+                        it.hasVideo = true
                     }
-
-                    Log.i("OverviewViewModel", "fetch video id = " + it.id + " finish")
                 }
+                Log.i("OverviewViewModel", "fetch video correct")
             } catch (e: java.lang.Exception){
                 Log.i("OverviewViewModel", "fetch video error")
             }

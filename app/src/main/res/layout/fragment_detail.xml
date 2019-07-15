@@ -34,7 +34,8 @@
                     android:scaleType="centerInside"
                     android:visibility="gone"
                     tools:src="@tools:sample/backgrounds/scenic"
-                    app:imageUrl="@{viewModel.selectedMovie.backdropPath}"/>
+                    app:showImage="@{viewModel.movie.hasVideo}"
+                    app:imagePath="@{viewModel.movie.backdropPath}"/>
 
             <TextView
                     android:id="@+id/moive_name_text"
@@ -44,7 +45,7 @@
                     android:textColor="#de000000"
                     android:textSize="39sp"
                     tools:text="Movie Name"
-                    android:text="@{viewModel.selectedMovie.title}"/>
+                    android:text="@{viewModel.movie.title}"/>
 
             <TextView
                     android:id="@+id/movie_overview_text"
@@ -54,7 +55,7 @@
                     android:textColor="#de000000"
                     android:textSize="20sp"
                     tools:text="overview"
-                    android:text="@{viewModel.selectedMovie.overview}"/>
+                    android:text="@{viewModel.movie.overview}"/>
 
         </LinearLayout>
     </ScrollView>
