@@ -5,6 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
+import java.time.LocalDate
+import java.time.ZoneOffset
 
 @Parcelize
 data class Movie(
@@ -17,7 +19,7 @@ data class Movie(
     val backdropPath: String?,
     val originalLanguage: String?,
     val overview: String?,
-    val releaseDate: String?,
+    val releaseDate: Long?,
     var videoId: String? = null,
     var videoKey: String? = null,
     var videoName: String? = null,
@@ -41,7 +43,7 @@ data class DatabaseMoive constructor(
     val backdropPath: String?,
     val originalLanguage: String?,
     val overview: String?,
-    val releaseDate: String?,
+    val releaseDate: Long?,
     var videoId: String?,
     var videoKey: String?,
     var videoName: String?,
@@ -97,11 +99,11 @@ fun List<DatabaseMoive>.asDomainModel(): List<Movie> {
             videoSize = it.videoSize,
             videoType = it.videoType,
             hasVideo = it.hasVideo
-            )
+        )
     }
 }
 
-fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork){
+fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork) {
     videoId = videoNetwork.videoId
     videoKey = videoNetwork.key
     videoName = videoNetwork.name
@@ -115,7 +117,7 @@ fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork){
 // that returns an array of <DatabaseVideo>.
 fun MoviePage.asDomainModel(): List<Movie> {
     return results.map {
-        Movie (
+        Movie(
             id = it.id,
             voteCount = it.voteCount,
             voteAverage = it.voteAverage,
@@ -149,15 +151,21 @@ data class MovieNetwork(
     @Json(name = "backdrop_path") val _backdropPath: String?,
     @Json(name = "original_language") val originalLanguage: String,
     val overview: String,
-    @Json(name = "release_date") val releaseDate: String
+    @Json(name = "release_date") val _releaseDate: String
 ) : Parcelable {
     val posterPath: String?
         get() = _posterPath?.substring(1) ?: null
 
     val backdropPath: String?
         get() = _backdropPath?.substring(1) ?: null
+
+    val releaseDate: Long?
+        get() = dateToMilli(LocalDate.parse(_releaseDate))
 }
 
+fun dateToMilli(date: LocalDate): Long{
+    return date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+}
 
 data class VideoNetwork(
     @Json(name = "id") val videoId: String?,

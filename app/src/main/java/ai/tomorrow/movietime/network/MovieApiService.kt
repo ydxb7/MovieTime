@@ -18,6 +18,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.lang.Exception
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
 
@@ -31,7 +34,7 @@ enum class MovieApiSort(val value: String) {
     UPCOMING("upcoming"), NOW_PLAYING("now_playing")
 }
 
-val movieSortList = listOf<String>("popular", "top_rated")
+val movieSortList = listOf<String>("popular", "top_rated", "upcoming", "playing now")
 //val movieSortList = listOf<String>( "popular", "top_rated", "upcoming", "now_playing")
 
 
@@ -65,10 +68,31 @@ interface MovieApiService {
      * The @GET annotation indicates that the "primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22"
      * endpoint will be requested with the GET HTTP method
      */
-    @GET("3/movie/{sort}")
-    fun getMovieList(@Path("sort") sort: String, @Query("api_key") api_key: String):
+//    @GET("3/movie/{sort}")
+//    fun getMovieList(@Path("sort") sort: String, @Query("api_key") api_key: String):
+//    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
+//            Call<MoviePage>
+
+    @GET("3/discover/movie")
+    fun getMovieDate(
+        @Query("api_key") api_key: String,
+        @Query("primary_release_date.gte") date1: String,
+        @Query("primary_release_date.lte") date2: String,
+        @Query("sort_by") sort_by: String
+    ):
     // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
             Call<MoviePage>
+
+    @GET("3/discover/movie")
+    fun getMovieList(
+        @Query("api_key") api_key: String,
+        @Query("sort_by") sort_by: String,
+        @Query("vote_count.gte") vote_count: Int
+    ):
+    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
+            Call<MoviePage>
+
+
 }
 
 /**
@@ -121,23 +145,65 @@ suspend fun fetchVideo(movieList: List<Movie>) {
     }
 }
 
+
 /**
  * Gets Movies property information from the Movie API Retrofit service and updates the
  * [MovieNetwork] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
  * coroutine Deferred, which we await to get the result of the transaction.
  */
-suspend fun fetchMoviesList(sort: String): List<Movie> {
+suspend fun fetchMoviesList(movieType: String): List<Movie> {
 
-    // Get the Deferred object for our Retrofit request
-    var getPropertiesDeferred =
-        MovieApi.retrofitService.getMovieList(sort = sort, api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey)
-    Log.i("MovieApiService", "sort_by = " + sort)
+    val date_now = LocalDate.now()
+    val date_plus20 = date_now.plusDays(20)
+    val date_minus20 = date_now.minusDays(20)
+    var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+
+    Log.i("MovieApiService", "date_now.format(formatter) = " + date_now.format(formatter))
+    Log.i("MovieApiService", "date_plus20.format(formatter) = " + date_plus20.format(formatter))
+    Log.i("MovieApiService", "date_minus20.format(formatter) = " + date_minus20.format(formatter))
+
+    var getPropertiesDeferred = when (movieType) {
+        // Get the Deferred object for our Retrofit request
+        "popular" -> MovieApi.retrofitService.getMovieList(
+            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey,
+            sort_by = "popularity.desc",
+            vote_count = 1000
+        )
+
+        "top_rated" -> MovieApi.retrofitService.getMovieList(
+            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey,
+            sort_by = "vote_average.desc",
+            vote_count = 1000
+        )
+
+        "upcoming" -> MovieApi.retrofitService.getMovieDate(
+            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey,
+            date1 = date_now.plusDays(1).format(formatter),
+            date2 = date_plus20.format(formatter),
+            sort_by = "popularity.desc"
+        )
+
+        "playing now" -> MovieApi.retrofitService.getMovieDate(
+            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey,
+            date1 = date_minus20.format(formatter),
+            date2 = date_now.format(formatter),
+            sort_by = "popularity.desc"
+        )
+
+        else -> throw IllegalArgumentException("movie type is wrong!")
+
+    }
+
 
     try {
         // this will run on a thread managed by Retrofit
         val pageResult = getPropertiesDeferred.execute().body()
+
         val movieList = pageResult?.asDomainModel() ?: ArrayList()
+        Log.i("MovieApiService", "sort_by = " + movieType)
         Log.i("MovieApiService", "fetch movie list success!  ")
+        Log.i("MovieApiService", "movieList = " + movieList)
 
         mutex.withLock {
             fetchVideo(movieList)
@@ -156,3 +222,5 @@ fun fetchMovieOnline(sort: String): Deferred<List<Movie>> {
     val result = coroutineScope.async { fetchMoviesList(sort) }
     return result
 }
+
+

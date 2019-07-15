@@ -21,7 +21,7 @@ import kotlinx.coroutines.sync.withLock
 enum class MovieApiStatus { LOADING, ERROR, DONE }
 
 val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
-val movieSortMap = mapOf("popular" to "popularity", "top_rated" to "vote_average")
+//val movieSortMap = mapOf("popular" to "popularity", "top_rated" to "vote_average")
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
@@ -56,13 +56,13 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
     private val database = getDatabase(application)
 
     // Define a moviesRepositor by calling the constructor and passing in the database.
-    private val moviesRepository = MoviesRepository(database, movieSortMap[sort]!!)
+    private val moviesRepository = MoviesRepository(database)
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
 //    private val _movieList = MutableLiveData<List<Movie>>()
 
     // The external immutable LiveData for the navigation property
-    lateinit var movieList: LiveData<List<Movie>>
+    var movieList: LiveData<List<Movie>>
 //        get() = _movieList
 
     // Create an init block and launch a coroutine to call videosRepository.refreshVideos().
@@ -74,6 +74,8 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
         movieList = when(sort){
             "popular" -> moviesRepository.movies_popular
             "top_rated" -> moviesRepository.movies_rate
+            "upcoming" -> moviesRepository.movies_coming
+            "playing now" -> moviesRepository.movies_now
             else -> throw IllegalArgumentException("sort name wrong")
         }
 

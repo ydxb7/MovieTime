@@ -1,9 +1,17 @@
 package ai.tomorrow.movietime.database
 
 import ai.tomorrow.movietime.network.DatabaseMoive
+import ai.tomorrow.movietime.network.dateToMilli
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+
+
+
+
 
 // Create a @Dao interface called VideoDao.
 @Dao
@@ -15,6 +23,17 @@ interface MovieDao {
     // Add SQL @Query getMovies() function that returns a List of DatabaseVideo.
     @Query("select * from databaseMoive" + " ORDER BY voteAverage DESC LIMIT 20")
     fun getMovies_rate(): LiveData<List<DatabaseMoive>>
+
+    // Add SQL @Query getMovies() function that returns a List of DatabaseVideo.
+    @Query("select * from databaseMoive " +
+            "WHERE releaseDate BETWEEN :date1 AND :date2 " +
+            "ORDER BY releaseDate DESC LIMIT 20")
+    fun getMovies_now(date1: Long, date2: Long): LiveData<List<DatabaseMoive>>
+
+    @Query("select * from databaseMoive " +
+            "WHERE releaseDate BETWEEN :date1 AND :date2 " +
+            "ORDER BY releaseDate ASC LIMIT 20")
+    fun getMovies_coming(date1: Long, date2: Long): LiveData<List<DatabaseMoive>>
 
 
     // Add SQL @Insert insertAll() that replaces on conflict (or upsert).

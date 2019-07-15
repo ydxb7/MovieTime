@@ -4,6 +4,7 @@ import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentOverviewBinding
 import ai.tomorrow.movietime.viewPages.ViewPatersFragmentDirections
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +46,10 @@ class OverviewFragment(val sort: String) : Fragment() {
             viewModel.displayPropertyDetails(it)
         })
 
+        viewModel.movieList.observe(this, Observer {
+            Log.i("OverviewFragment", "sort = " + sort)
+            Log.i("OverviewFragment", "movieList = " + it)
+        })
 
 //        val dividerItemDecoration = DividerItemDecoration(binding.postersGrid.getContext(), R.drawable.divider)
 ////        val divider = ContextCompat.getDrawable(context!!, R.drawable.divider) as DividerItemDecoration
