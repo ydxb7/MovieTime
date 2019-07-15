@@ -18,7 +18,8 @@ interface MovieDao {
 
 
     // Add SQL @Insert insertAll() that replaces on conflict (or upsert).
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg videos: DatabaseMoive)  // vararg: variable arguments. The function can
     // take an unknown number of arguments. It'll actually pass an array under the hood and this way
     // callers can pass a few videos without making a list.
