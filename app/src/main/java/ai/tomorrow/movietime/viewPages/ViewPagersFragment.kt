@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
-class ViewPatersFragment: Fragment() {
+class ViewPagersFragment: Fragment() {
 //    lateinit var binding: FragmentViewPagersBinding
     lateinit var viewPager: ViewPager
 

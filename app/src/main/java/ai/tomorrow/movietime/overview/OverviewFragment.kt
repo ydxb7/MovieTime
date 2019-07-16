@@ -2,7 +2,7 @@ package ai.tomorrow.movietime.overview
 
 import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentOverviewBinding
-import ai.tomorrow.movietime.viewPages.ViewPatersFragmentDirections
+import ai.tomorrow.movietime.viewPages.ViewPagersFragmentDirections
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -61,7 +61,7 @@ class OverviewFragment(val sort: String) : Fragment() {
         viewModel.navigateToSelectedMovie.observe(this, Observer {
             if ( null != it ) {
                 // Must find the NavController from the Fragment
-                this.findNavController().navigate(ViewPatersFragmentDirections.actionViewPatersFragmentToDetailFragment(it))
+                this.findNavController().navigate(ViewPagersFragmentDirections.actionViewPagersFragmentToDetailFragment(it))
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
                 viewModel.displayPropertyDetailsComplete()
             }
