@@ -20,6 +20,7 @@
                 android:orientation="vertical"
                 android:padding="@dimen/videoPadding">
 
+            <!-- YouTube Player -->
             <fragment
                     android:id="@+id/youtube_fragment"
                     android:name="com.google.android.youtube.player.YouTubePlayerFragment"
@@ -27,6 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"/>
 
+            <!-- Poster -->
             <ImageView
                     android:id="@+id/moive_poster"
                     android:layout_width="match_parent"
@@ -37,6 +39,7 @@
                     app:showImage="@{viewModel.movie.hasVideo}"
                     app:imagePath="@{viewModel.movie.backdropPath}"/>
 
+            <!-- Title -->
             <TextView
                     android:id="@+id/moive_name_text"
                     android:layout_width="match_parent"
@@ -47,6 +50,16 @@
                     tools:text="Movie Name"
                     android:text="@{viewModel.movie.title}"/>
 
+            <!-- Release date -->
+            <TextView
+                    android:id="@+id/movie_detail_activity_release_date_text_view_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="@{viewModel.movie.releaseDate}"
+                    tools:text="2019-06-28" />
+
+            <!-- Overview -->
             <TextView
                     android:id="@+id/movie_overview_text"
                     android:layout_width="match_parent"
