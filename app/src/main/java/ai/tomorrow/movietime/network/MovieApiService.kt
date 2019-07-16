@@ -34,8 +34,8 @@ enum class MovieApiSort(val value: String) {
     UPCOMING("upcoming"), NOW_PLAYING("now_playing")
 }
 
-val movieSortList = listOf<String>("popular", "top_rated", "upcoming", "playing now")
-//val movieSortList = listOf<String>( "popular", "top_rated", "upcoming", "now_playing")
+//val movieSortList = listOf<String>("popular", "top_rated", "upcoming", "playing now")
+val movieSortList = listOf<String>( "popular", "top_rated", "upcoming", "now_playing")
 
 
 /**
@@ -68,29 +68,29 @@ interface MovieApiService {
      * The @GET annotation indicates that the "primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22"
      * endpoint will be requested with the GET HTTP method
      */
-//    @GET("3/movie/{sort}")
-//    fun getMovieList(@Path("sort") sort: String, @Query("api_key") api_key: String):
+    @GET("3/movie/{sort}")
+    fun getMovieList(@Path("sort") sort: String, @Query("api_key") api_key: String):
+    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
+            Call<MoviePage>
+
+//    @GET("3/discover/movie")
+//    fun getMovieDate(
+//        @Query("api_key") api_key: String,
+//        @Query("primary_release_date.gte") date1: String,
+//        @Query("primary_release_date.lte") date2: String,
+//        @Query("sort_by") sort_by: String
+//    ):
 //    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
 //            Call<MoviePage>
-
-    @GET("3/discover/movie")
-    fun getMovieDate(
-        @Query("api_key") api_key: String,
-        @Query("primary_release_date.gte") date1: String,
-        @Query("primary_release_date.lte") date2: String,
-        @Query("sort_by") sort_by: String
-    ):
-    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
-            Call<MoviePage>
-
-    @GET("3/discover/movie")
-    fun getMovieList(
-        @Query("api_key") api_key: String,
-        @Query("sort_by") sort_by: String,
-        @Query("vote_count.gte") vote_count: Int
-    ):
-    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
-            Call<MoviePage>
+//
+//    @GET("3/discover/movie")
+//    fun getMovieList(
+//        @Query("api_key") api_key: String,
+//        @Query("sort_by") sort_by: String,
+//        @Query("vote_count.gte") vote_count: Int
+//    ):
+//    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
+//            Call<MoviePage>
 
 
 }
@@ -153,10 +153,10 @@ suspend fun fetchVideo(movieList: List<Movie>) {
  */
 suspend fun fetchMoviesList(movieType: String): List<Movie> {
 
-    val date_now = LocalDate.now()
-    val date_plus20 = date_now.plusDays(20)
-    val date_minus20 = date_now.minusDays(20)
-    var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+//    val date_now = LocalDate.now()
+//    val date_plus20 = date_now.plusDays(20)
+//    val date_minus20 = date_now.minusDays(20)
+//    var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
 
     var getPropertiesDeferred = when (movieType) {

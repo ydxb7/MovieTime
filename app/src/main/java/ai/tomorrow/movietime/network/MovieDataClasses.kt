@@ -26,7 +26,11 @@ data class Movie(
     var videoSite: String? = null,
     var videoSize: Int? = null,
     var videoType: String? = null,
-    var hasVideo: Boolean = false
+    var hasVideo: Boolean = false,
+    var typePopular: Boolean = false,
+    var typeRate: Boolean = false,
+    var typeUpcoming: Boolean = false,
+    var typeNow: Boolean = false
 ) : Parcelable
 
 
