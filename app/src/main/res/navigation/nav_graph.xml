@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/nav_graph"
-            app:startDestination="@id/viewPatersFragment">
+            app:startDestination="@id/viewPagersFragment">
 
     <fragment android:id="@+id/detailFragment" android:name="ai.tomorrow.movietime.detail.DetailFragment"
               android:label="DetailFragment">
@@ -10,10 +10,10 @@
                 android:name="selectedMovie"
                 app:argType="ai.tomorrow.movietime.network.Movie"/>
     </fragment>
-    <fragment android:id="@+id/viewPatersFragment" android:name="ai.tomorrow.movietime.viewPages.ViewPatersFragment"
-              android:label="ViewPatersFragment">
-        <action android:id="@+id/action_viewPatersFragment_to_detailFragment" app:destination="@id/detailFragment"
-                app:popUpTo="@+id/viewPatersFragment"/>
+    <fragment android:id="@+id/viewPagersFragment" android:name="ai.tomorrow.movietime.viewPages.ViewPagersFragment"
+              android:label="ViewPagersFragment">
+        <action android:id="@+id/action_viewPagersFragment_to_detailFragment" app:destination="@id/detailFragment"
+                app:popUpTo="@+id/viewPagersFragment"/>
     </fragment>
 
 </navigation>
