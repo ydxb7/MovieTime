@@ -63,8 +63,8 @@ class MoviesRepository(private val database: MoviesDatabase) {
     suspend fun refreshMovies(sort: String) {
         withContext(Dispatchers.IO) {
             val movieList = fetchMovieOnline(sort).await()
-            val movieList_withImage = movieList.filter { it.backdropPath != null }
-            database.movieDao.insertAll(*movieList_withImage.asDatabaseModel())
+//            val movieList_withImage = movieList.filter { it.backdropPath != null }
+            database.movieDao.insertAll(*movieList.asDatabaseModel())
         }
 
     }

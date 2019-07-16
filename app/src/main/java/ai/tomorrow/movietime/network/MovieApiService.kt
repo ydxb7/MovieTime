@@ -195,9 +195,11 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
     try {
         // this will run on a thread managed by Retrofit
         val pageResult = getPropertiesDeferred.execute().body()
+        val movieListNoVideo = pageResult?.asDomainModel() ?: ArrayList()
+        val movieList = movieListNoVideo.filter{it.backdropPath != null}
 
-        val movieList = pageResult?.asDomainModel() ?: ArrayList()
         Log.i("MovieApiService", "sort_by = " + movieType)
+        Log.i("MovieApiService", "movieList = " + movieList)
         Log.i("MovieApiService", "fetch movie list success!  ")
         mutex.withLock {
             fetchVideo(movieList)
