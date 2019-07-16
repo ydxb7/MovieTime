@@ -71,6 +71,16 @@ fun bindStatus(statusImageView: ImageView, status: MovieApiStatus?) {
     }
 }
 
+@BindingAdapter("showPlayIcon")
+fun showPlayIcon(imageView: ImageView, hasVideo: Boolean) {
+    if (hasVideo){
+        imageView.visibility = View.VISIBLE
+    } else{
+        imageView.visibility = View.GONE
+    }
+}
+
+
 
 @BindingAdapter(value = *arrayOf("showImage", "imagePath"), requireAll = false)
 fun showImage(imageView: ImageView, hasVideo: Boolean, imagePath: String?) {
