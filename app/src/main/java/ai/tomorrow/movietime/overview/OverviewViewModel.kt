@@ -29,11 +29,11 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
 //    private var sort = SortHolder()
 
     // The internal MutableLiveData that stores the status of the most recent request
-    private val _status = MutableLiveData<MovieApiStatus>()
+    val status = MutableLiveData<MovieApiStatus>()
 
-    // The external immutable LiveData for the request status
-    val status: LiveData<MovieApiStatus>
-        get() = _status
+//    // The external immutable LiveData for the request status
+//    val status: LiveData<MovieApiStatus>
+//        get() = _status
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
     private val _navigateToSelectedMovie = MutableLiveData<Movie>()
@@ -67,26 +67,31 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
 
     // Create an init block and launch a coroutine to call videosRepository.refreshVideos().
     init {
-        _status.value = MovieApiStatus.LOADING
         // Get videos from the repository and assign it to a playlist variable.
-
         Log.i("OverviewViewModel", "sort = " +  sort)
-        movieList = when(sort){
+
+        movieList = getMovieFromDatabase(sort)
+
+        refreshDatabase(sort)
+    }
+
+
+    fun getMovieFromDatabase(sort: String): LiveData<List<Movie>>{
+        return when(sort){
             "popular" -> moviesRepository.movies_popular
             "top_rated" -> moviesRepository.movies_rate
             "upcoming" -> moviesRepository.movies_coming
             "now_playing" -> moviesRepository.movies_now
             else -> throw IllegalArgumentException("sort name wrong")
         }
+    }
 
-        _status.value = MovieApiStatus.DONE
-
+    fun refreshDatabase(sort: String){
         viewModelScope.launch {
             // 因为这是 suspend function，所以要用launch
             moviesRepository.refreshMovies(sort)
         }
     }
-
 
 
     /**

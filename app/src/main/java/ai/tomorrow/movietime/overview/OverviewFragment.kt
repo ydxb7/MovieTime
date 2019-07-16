@@ -47,8 +47,11 @@ class OverviewFragment(val sort: String) : Fragment() {
         })
 
         viewModel.movieList.observe(this, Observer {
-            Log.i("OverviewFragment", "sort = " + sort)
-            Log.i("OverviewFragment", "movieList = " + it)
+            if (it.size == 0){
+                viewModel.status.value = MovieApiStatus.LOADING
+            }else{
+                viewModel.status.value = MovieApiStatus.DONE
+            }
         })
 
 //        val dividerItemDecoration = DividerItemDecoration(binding.postersGrid.getContext(), R.drawable.divider)
