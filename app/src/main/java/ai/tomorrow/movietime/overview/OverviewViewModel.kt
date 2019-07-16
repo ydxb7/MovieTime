@@ -75,7 +75,7 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
             "popular" -> moviesRepository.movies_popular
             "top_rated" -> moviesRepository.movies_rate
             "upcoming" -> moviesRepository.movies_coming
-            "playing now" -> moviesRepository.movies_now
+            "now_playing" -> moviesRepository.movies_now
             else -> throw IllegalArgumentException("sort name wrong")
         }
 

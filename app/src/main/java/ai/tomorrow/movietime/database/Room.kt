@@ -1,7 +1,5 @@
 package ai.tomorrow.movietime.database
 
-import ai.tomorrow.movietime.network.DatabaseMoive
-import ai.tomorrow.movietime.network.dateToMilli
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -17,23 +15,25 @@ import java.time.format.DateTimeFormatter
 @Dao
 interface MovieDao {
     // Add SQL @Query getMovies() function that returns a List of DatabaseVideo.
-    @Query("select * from databaseMoive" + " ORDER BY popularity DESC LIMIT 20")
+    @Query("select * from databaseMoive " +
+            "WHERE typePopular == 1 " +
+            "ORDER BY popularity DESC LIMIT 20")
     fun getMovies_popularity(): LiveData<List<DatabaseMoive>>
 
     // Add SQL @Query getMovies() function that returns a List of DatabaseVideo.
-    @Query("select * from databaseMoive" + " ORDER BY voteAverage DESC LIMIT 20")
+    @Query("select * from databaseMoive " +
+            "WHERE typeRate == 1 " +
+            "ORDER BY voteAverage DESC LIMIT 20")
     fun getMovies_rate(): LiveData<List<DatabaseMoive>>
 
     // Add SQL @Query getMovies() function that returns a List of DatabaseVideo.
     @Query("select * from databaseMoive " +
-            "WHERE releaseDate BETWEEN :date1 AND :date2 " +
-            "ORDER BY releaseDate DESC LIMIT 20")
-    fun getMovies_now(date1: Long, date2: Long): LiveData<List<DatabaseMoive>>
+            "WHERE typeNow == 1 " )
+    fun getMovies_now(): LiveData<List<DatabaseMoive>>
 
     @Query("select * from databaseMoive " +
-            "WHERE releaseDate BETWEEN :date1 AND :date2 " +
-            "ORDER BY releaseDate ASC LIMIT 20")
-    fun getMovies_coming(date1: Long, date2: Long): LiveData<List<DatabaseMoive>>
+            "WHERE typeUpcoming == 1 " )
+    fun getMovies_coming(): LiveData<List<DatabaseMoive>>
 
 
     // Add SQL @Insert insertAll() that replaces on conflict (or upsert).

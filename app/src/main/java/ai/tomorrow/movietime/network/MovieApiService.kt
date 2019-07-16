@@ -162,29 +162,23 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
     var getPropertiesDeferred = when (movieType) {
         // Get the Deferred object for our Retrofit request
         "popular" -> MovieApi.retrofitService.getMovieList(
-            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey,
-            sort_by = "popularity.desc",
-            vote_count = 1000
+            sort = "popular",
+            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
         )
 
         "top_rated" -> MovieApi.retrofitService.getMovieList(
-            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey,
-            sort_by = "vote_average.desc",
-            vote_count = 1000
+            sort = "top_rated",
+            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
         )
 
-        "upcoming" -> MovieApi.retrofitService.getMovieDate(
-            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey,
-            date1 = date_now.plusDays(1).format(formatter),
-            date2 = date_plus20.format(formatter),
-            sort_by = "popularity.desc"
+        "upcoming" -> MovieApi.retrofitService.getMovieList(
+            sort = "upcoming",
+            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
         )
 
-        "playing now" -> MovieApi.retrofitService.getMovieDate(
-            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey,
-            date1 = date_minus20.format(formatter),
-            date2 = date_now.format(formatter),
-            sort_by = "popularity.desc"
+        "now_playing" -> MovieApi.retrofitService.getMovieList(
+            sort = "now_playing",
+            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
         )
 
         else -> throw IllegalArgumentException("movie type is wrong!")
@@ -197,6 +191,14 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
         val pageResult = getPropertiesDeferred.execute().body()
 
         val movieList = pageResult?.asDomainModel() ?: ArrayList()
+
+        when(movieType){
+            "popular" -> movieList.map{ it.typePopular = true }
+            "top_rated" -> movieList.map{ it.typeRate = true }
+            "upcoming" -> movieList.map{ it.typeUpcoming = true }
+            "now_playing" -> movieList.map{ it.typeNow = true }
+        }
+
         Log.i("MovieApiService", "sort_by = " + movieType)
         Log.i("MovieApiService", "fetch movie list success!  ")
         mutex.withLock {

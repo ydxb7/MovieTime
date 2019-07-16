@@ -1,6 +1,8 @@
 package ai.tomorrow.movietime.repository
 
 import ai.tomorrow.movietime.database.MoviesDatabase
+import ai.tomorrow.movietime.database.asDatabaseModel
+import ai.tomorrow.movietime.database.asDomainModel
 import ai.tomorrow.movietime.network.*
 import android.net.Network
 import androidx.lifecycle.LiveData
@@ -14,16 +16,16 @@ import java.time.format.DateTimeFormatter
 // Repository for fetching decbyte videos from the network and storing them on disk.
 class MoviesRepository(private val database: MoviesDatabase) {
 
-    val date_now = LocalDate.now()
-    val date_plus20 = date_now.plusDays(20)
-    val date_plus1 = date_now.plusDays(1)
-    val date_minus20 = date_now.minusDays(20)
-    var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-    val date_now_milli = dateToMilli(date_now)
-    val date_plus20_milli = dateToMilli(date_plus20)
-    val date_plus1_milli = dateToMilli(date_plus1)
-    val date_minus20_milli = dateToMilli(date_minus20)
+//    val date_now = LocalDate.now()
+//    val date_plus20 = date_now.plusDays(20)
+//    val date_plus1 = date_now.plusDays(1)
+//    val date_minus20 = date_now.minusDays(20)
+//    var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+//
+//    val date_now_milli = dateToMilli(date_now)
+//    val date_plus20_milli = dateToMilli(date_plus20)
+//    val date_plus1_milli = dateToMilli(date_plus1)
+//    val date_minus20_milli = dateToMilli(date_minus20)
 
     // Transformations.map  to convert the DatabaseVideo list to a list of Video.
     // * is used to pass an array to a vararg parameter
@@ -41,12 +43,12 @@ class MoviesRepository(private val database: MoviesDatabase) {
         }
 
     val movies_now: LiveData<List<Movie>> =
-        Transformations.map(database.movieDao.getMovies_now(date_minus20_milli, date_now_milli)) {
+        Transformations.map(database.movieDao.getMovies_now()) {
             it.asDomainModel()
         }
 
     val movies_coming: LiveData<List<Movie>> =
-        Transformations.map(database.movieDao.getMovies_coming(date_plus1_milli, date_plus20_milli)) {
+        Transformations.map(database.movieDao.getMovies_coming()) {
             it.asDomainModel()
         }
 

@@ -1,5 +1,6 @@
 package ai.tomorrow.movietime.network
 
+import ai.tomorrow.movietime.database.DatabaseMoive
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -19,7 +20,7 @@ data class Movie(
     val backdropPath: String?,
     val originalLanguage: String?,
     val overview: String?,
-    val releaseDate: Long?,
+    val releaseDate: String?,
     var videoId: String? = null,
     var videoKey: String? = null,
     var videoName: String? = null,
@@ -34,78 +35,10 @@ data class Movie(
 ) : Parcelable
 
 
-// Create the DatabaseEntities class, adding annotations for the class and the primary key.
-@Entity
-data class DatabaseMoive constructor(
-    @PrimaryKey
-    val id: Long,
-    val voteCount: String?,
-    val voteAverage: Double?,
-    val title: String,
-    val popularity: Double?,
-    val posterPath: String?,
-    val backdropPath: String?,
-    val originalLanguage: String?,
-    val overview: String?,
-    val releaseDate: Long?,
-    var videoId: String?,
-    var videoKey: String?,
-    var videoName: String?,
-    var videoSite: String?,
-    var videoSize: Int?,
-    var videoType: String?,
-    var hasVideo: Boolean
-)
 
-// Define extension function List<DatabaseVideo>.asDomainModel(), that returns a list of <Video>.
-fun List<Movie>.asDatabaseModel(): Array<DatabaseMoive> {
-    return map {
-        DatabaseMoive(
-            id = it.id,
-            voteCount = it.voteCount,
-            voteAverage = it.voteAverage,
-            title = it.title,
-            popularity = it.popularity,
-            posterPath = it.posterPath,
-            backdropPath = it.backdropPath,
-            originalLanguage = it.originalLanguage,
-            overview = it.overview,
-            releaseDate = it.releaseDate,
-            videoId = it.videoId,
-            videoKey = it.videoKey,
-            videoName = it.videoName,
-            videoSite = it.videoSite,
-            videoSize = it.videoSize,
-            videoType = it.videoType,
-            hasVideo = it.hasVideo
-        )
-    }.toTypedArray()
-}
 
-// Define extension function List<DatabaseVideo>.asDomainModel(), that returns a list of <Video>.
-fun List<DatabaseMoive>.asDomainModel(): List<Movie> {
-    return map {
-        Movie(
-            id = it.id,
-            voteCount = it.voteCount,
-            voteAverage = it.voteAverage,
-            title = it.title,
-            popularity = it.popularity,
-            posterPath = it.posterPath,
-            backdropPath = it.backdropPath,
-            originalLanguage = it.originalLanguage,
-            overview = it.overview,
-            releaseDate = it.releaseDate,
-            videoId = it.videoId,
-            videoKey = it.videoKey,
-            videoName = it.videoName,
-            videoSite = it.videoSite,
-            videoSize = it.videoSize,
-            videoType = it.videoType,
-            hasVideo = it.hasVideo
-        )
-    }
-}
+
+
 
 fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork) {
     videoId = videoNetwork.videoId
@@ -155,7 +88,7 @@ data class MovieNetwork(
     @Json(name = "backdrop_path") val _backdropPath: String?,
     @Json(name = "original_language") val originalLanguage: String,
     val overview: String,
-    @Json(name = "release_date") val _releaseDate: String
+    @Json(name = "release_date") val releaseDate: String
 ) : Parcelable {
     val posterPath: String?
         get() = _posterPath?.substring(1) ?: null
@@ -163,13 +96,13 @@ data class MovieNetwork(
     val backdropPath: String?
         get() = _backdropPath?.substring(1) ?: null
 
-    val releaseDate: Long?
-        get() = dateToMilli(LocalDate.parse(_releaseDate))
+//    val releaseDate: Long?
+//        get() = dateToMilli(LocalDate.parse(_releaseDate))
 }
 
-fun dateToMilli(date: LocalDate): Long{
-    return date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
-}
+//fun dateToMilli(date: LocalDate): Long{
+//    return date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+//}
 
 data class VideoNetwork(
     @Json(name = "id") val videoId: String?,
