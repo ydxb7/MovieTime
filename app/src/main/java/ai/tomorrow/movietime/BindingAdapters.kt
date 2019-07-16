@@ -4,6 +4,7 @@ import ai.tomorrow.movietime.network.Movie
 import ai.tomorrow.movietime.network.MovieNetwork
 import ai.tomorrow.movietime.overview.MovieApiStatus
 import ai.tomorrow.movietime.overview.MovieListAdapter
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
@@ -96,3 +97,11 @@ fun showImage(imageView: ImageView, hasVideo: Boolean, imagePath: String?) {
 }
 
 
+@BindingAdapter("showPlayIcon")
+fun showPlayIcon(imageView: ImageView, hasVideo: Boolean) {
+    if (hasVideo){
+        imageView.visibility = View.VISIBLE
+    } else{
+        imageView.visibility = View.GONE
+    }
+}
