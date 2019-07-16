@@ -191,6 +191,7 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
         val pageResult = getPropertiesDeferred.execute().body()
 
         val movieList = pageResult?.asDomainModel() ?: ArrayList()
+        Log.i("MovieApiService", "movieList = " + movieList)
 
         when(movieType){
             "popular" -> movieList.map{ it.typePopular = true }

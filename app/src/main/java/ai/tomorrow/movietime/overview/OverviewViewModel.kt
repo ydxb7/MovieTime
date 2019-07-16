@@ -81,10 +81,10 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
 
         _status.value = MovieApiStatus.DONE
 
-        viewModelScope.launch {
-            // 因为这是 suspend function，所以要用launch
-            moviesRepository.refreshMovies(sort)
-        }
+//        viewModelScope.launch {
+//            // 因为这是 suspend function，所以要用launch
+//            moviesRepository.refreshMovies(sort)
+//        }
     }
 
 
