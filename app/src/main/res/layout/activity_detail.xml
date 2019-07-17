@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/videoPadding">
+                android:padding="@dimen/space_medium_large">
 
             <LinearLayout
                     android:id="@+id/youtube_poster"
@@ -48,7 +48,7 @@
                     android:id="@+id/moive_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/space_medium_large"
                     android:layout_below="@id/youtube_poster"
                     android:textColor="#de000000"
                     android:textSize="26sp"
@@ -106,7 +106,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/genre_text"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/space_medium_small"
                     android:textColor="#de000000"
                     android:textSize="18sp"
                     tools:text="overview"

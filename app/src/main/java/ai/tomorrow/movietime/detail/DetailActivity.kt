@@ -101,32 +101,32 @@ class DetailActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    // Set different sizes of the youTubePlayerFragment according to the orientation of the phone
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        val currentOrientation = resources.configuration.orientation
-
-        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            val screenWidth = dpToPx(resources.configuration.screenWidthDp)
-            val videoWidth = screenWidth - screenWidth / 4 - resources.getDimension(R.dimen.videoPadding).toInt() * 2
-            setLayoutSize(youTubePlayerFragment.getView()!!, videoWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-        } else {
-            setLayoutSize(youTubePlayerFragment.getView()!!,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        }
-    }
-
-    // Set the layout size
-    private fun setLayoutSize(view: View, width: Int, height: Int) {
-        val params = view.layoutParams
-        params.width = width
-        params.height = height
-        view.layoutParams = params
-    }
-
-    private fun dpToPx(dp: Int): Int {
-        return (dp * resources.displayMetrics.density + 0.5f).toInt()
-    }
+//    // Set different sizes of the youTubePlayerFragment according to the orientation of the phone
+//    override fun onConfigurationChanged(newConfig: Configuration) {
+//        super.onConfigurationChanged(newConfig)
+//        val currentOrientation = resources.configuration.orientation
+//
+//        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            val screenWidth = dpToPx(resources.configuration.screenWidthDp)
+//            val videoWidth = screenWidth - screenWidth / 4 - resources.getDimension(R.dimen.space_medium_small).toInt() * 2
+//            setLayoutSize(youTubePlayerFragment.getView()!!, videoWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+//
+//        } else {
+//            setLayoutSize(youTubePlayerFragment.getView()!!,
+//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//        }
+//    }
+//
+//    // Set the layout size
+//    private fun setLayoutSize(view: View, width: Int, height: Int) {
+//        val params = view.layoutParams
+//        params.width = width
+//        params.height = height
+//        view.layoutParams = params
+//    }
+//
+//    private fun dpToPx(dp: Int): Int {
+//        return (dp * resources.displayMetrics.density + 0.5f).toInt()
+//    }
 
 }
