@@ -42,7 +42,7 @@ class DetailViewModel(val movie: Movie, app: Application) :
     // reform the runtime from Int to String
     val runtimeString = Transformations.map(genres) { genres ->
         if(genres == null){
-            "--"
+            ""
         } else {
             // runtime
             val runtime = genres.runtime

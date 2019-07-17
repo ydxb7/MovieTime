@@ -58,7 +58,7 @@ class OverviewFragment(val sort: String) : Fragment() {
         viewModel.navigateToSelectedMovie.observe(this, Observer {
             if ( null != it ) {
                 // Must find the NavController from the Fragment
-                this.findNavController().navigate(ViewPagersFragmentDirections.actionViewPagersFragmentToDetailFragment(it))
+                this.findNavController().navigate(ViewPagersFragmentDirections.actionViewPagersFragmentToDetailActivity(it))
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
                 viewModel.displayMovieDetailsComplete()
             }

@@ -1,36 +1,33 @@
 package ai.tomorrow.movietime.detail
 
 import ai.tomorrow.movietime.BuildConfig
+import ai.tomorrow.movietime.BuildConfig.Youtube_ApiKey
 import ai.tomorrow.movietime.R
-import ai.tomorrow.movietime.databinding.FragmentDetailBinding
+import ai.tomorrow.movietime.databinding.ActivityDetailBinding
 import android.content.res.Configuration
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.youtube.player.YouTubePlayerFragment
 
-val Youtube_ApiKey = BuildConfig.Youtube_ApiKey
 
-class DetailFragment : Fragment() {
+class DetailActivity : AppCompatActivity() {
+    val Youtube_ApiKey = BuildConfig.Youtube_ApiKey
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    // get the youTubePlayerFragment
-    private val youTubePlayerFragment by lazy { (context as AppCompatActivity).fragmentManager
-        .findFragmentById(ai.tomorrow.movietime.R.id.youtube_fragment) as YouTubePlayerFragment }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val application = requireNotNull(activity).application
-        val binding = FragmentDetailBinding.inflate(inflater)
+        val binding: ActivityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.setLifecycleOwner(this)
 
+        Log.i("DetailActivity", "DetailActivityArgs.fromBundle(intent.extras).selectedMovie = " + DetailActivityArgs.fromBundle(intent.extras).selectedMovie)
         // The movie passed to this fragment
-        val movie = DetailFragmentArgs.fromBundle(arguments!!).selectedMovie
+        val movie = DetailActivityArgs.fromBundle(intent.extras).selectedMovie
 
         // create ViewModel
         val viewModelFactory = DetailViewModelFactory(movie, application)
@@ -52,13 +49,52 @@ class DetailFragment : Fragment() {
             youTubePlayerFragment.view.visibility = View.GONE
         }
 
-        return binding.root
     }
+
+    // get the youTubePlayerFragment
+    private val youTubePlayerFragment by lazy {
+        fragmentManager
+        .findFragmentById(R.id.youtube_fragment) as YouTubePlayerFragment
+    }
+
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+//                              savedInstanceState: Bundle?): View? {
+////        val application = requireNotNull(activity).application
+////        val binding = FragmentDetailBinding.inflate(inflater)
+////
+////        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
+////        binding.setLifecycleOwner(this)
+////
+////        // The movie passed to this fragment
+////        val movie = DetailFragmentArgs.fromBundle(arguments!!).selectedMovie
+////
+////        // create ViewModel
+////        val viewModelFactory = DetailViewModelFactory(movie, application)
+////        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
+////        binding.viewModel = viewModel
+////
+////        // Set the rating bar
+////        binding.ratingBar.setNumStars(10)
+////        binding.ratingBar.rating = movie.voteAverage?.toFloat() ?: 0.toFloat()
+////        binding.ratingBar.setIsIndicator(true)
+////
+////        // set youTubePlayerFragment
+////        youTubePlayerFragment.setRetainInstance(true)
+////
+////        // If the movie has video, then show the youTubePlayerFragment, otherwise hide it
+////        if (viewModel.movie.hasVideo){
+////            youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
+////        } else {
+////            youTubePlayerFragment.view.visibility = View.GONE
+////        }
+////
+////        return binding.root
+//    }
 
     override fun onDestroy() {
         // clean the youTubePlayerFragment
         if (youTubePlayerFragment != null) {
-            (context as AppCompatActivity).fragmentManager.beginTransaction().remove(youTubePlayerFragment).commitAllowingStateLoss()
+            fragmentManager.beginTransaction().remove(youTubePlayerFragment).commitAllowingStateLoss()
         }
         super.onDestroy()
     }
@@ -92,4 +128,3 @@ class DetailFragment : Fragment() {
     }
 
 }
-

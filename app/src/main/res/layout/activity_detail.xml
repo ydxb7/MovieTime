@@ -16,14 +16,14 @@
 
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/videoPadding">
 
             <LinearLayout
                     android:id="@+id/youtube_poster"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                 <!-- YouTube Player -->
                 <fragment
                         android:id="@+id/youtube_fragment"

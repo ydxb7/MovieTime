@@ -4,16 +4,24 @@
             android:id="@+id/nav_graph"
             app:startDestination="@id/viewPagersFragment">
 
-    <fragment android:id="@+id/detailFragment" android:name="ai.tomorrow.movietime.detail.DetailFragment"
-              android:label="DetailFragment">
+    <!--<fragment android:id="@+id/detailFragment" android:name="ai.tomorrow.movietime.detail.DetailFragment"-->
+              <!--android:label="DetailFragment">-->
+        <!--<argument-->
+                <!--android:name="selectedMovie"-->
+                <!--app:argType="ai.tomorrow.movietime.network.Movie"/>-->
+    <!--</fragment>-->
+    <fragment android:id="@+id/viewPagersFragment" android:name="ai.tomorrow.movietime.viewPages.ViewPagersFragment"
+              android:label="ViewPagersFragment">
+        <!--<action android:id="@+id/action_viewPagersFragment_to_detailFragment" app:destination="@id/detailFragment"-->
+                <!--app:popUpTo="@+id/viewPagersFragment"/>-->
+        <action android:id="@+id/action_viewPagersFragment_to_detailActivity" app:destination="@id/detailActivity"
+                app:popUpTo="@+id/viewPagersFragment"/>
+    </fragment>
+    <activity android:id="@+id/detailActivity" android:name="ai.tomorrow.movietime.detail.DetailActivity"
+              android:label="DetailActivity">
         <argument
                 android:name="selectedMovie"
                 app:argType="ai.tomorrow.movietime.network.Movie"/>
-    </fragment>
-    <fragment android:id="@+id/viewPagersFragment" android:name="ai.tomorrow.movietime.viewPages.ViewPagersFragment"
-              android:label="ViewPagersFragment">
-        <action android:id="@+id/action_viewPagersFragment_to_detailFragment" app:destination="@id/detailFragment"
-                app:popUpTo="@+id/viewPagersFragment"/>
-    </fragment>
+    </activity>
 
 </navigation>
