@@ -5,24 +5,19 @@ import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentDetailBinding
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RatingBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.youtube.player.YouTubePlayerFragment
-import kotlinx.android.synthetic.main.fragment_detail.*
 
+val Youtube_ApiKey = BuildConfig.Youtube_ApiKey
 
 class DetailFragment : Fragment() {
-    companion object{
-        val Youtube_ApiKey = BuildConfig.Youtube_ApiKey
-    }
 
+    // get the youTubePlayerFragment
     private val youTubePlayerFragment by lazy { (context as AppCompatActivity).fragmentManager
         .findFragmentById(ai.tomorrow.movietime.R.id.youtube_fragment) as YouTubePlayerFragment }
 
@@ -30,21 +25,27 @@ class DetailFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val application = requireNotNull(activity).application
         val binding = FragmentDetailBinding.inflate(inflater)
-        binding.setLifecycleOwner(this)
-        val movieProperty = DetailFragmentArgs.fromBundle(arguments!!).selectedMovie
-        val viewModelFactory = DetailViewModelFactory(movieProperty, application)
 
+        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
+        binding.setLifecycleOwner(this)
+
+        // The movie passed to this fragment
+        val movie = DetailFragmentArgs.fromBundle(arguments!!).selectedMovie
+
+        // create ViewModel
+        val viewModelFactory = DetailViewModelFactory(movie, application)
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
 
-//        val ratingBar = binding.ratingBar
+        // Set the rating bar
         binding.ratingBar.setNumStars(10)
-        binding.ratingBar.rating = movieProperty.voteAverage?.toFloat() ?: 0.toFloat()
+        binding.ratingBar.rating = movie.voteAverage?.toFloat() ?: 0.toFloat()
         binding.ratingBar.setIsIndicator(true)
 
-//        viewModel.getVideoResults()
+        // set youTubePlayerFragment
         youTubePlayerFragment.setRetainInstance(true)
 
+        // If the movie has video, then show the youTubePlayerFragment, otherwise hide it
         if (viewModel.movie.hasVideo){
             youTubePlayerFragment.initialize(Youtube_ApiKey, viewModel.onInitializedListener)
         } else {
@@ -55,14 +56,14 @@ class DetailFragment : Fragment() {
     }
 
     override fun onDestroy() {
-
+        // clean the youTubePlayerFragment
         if (youTubePlayerFragment != null) {
             (context as AppCompatActivity).fragmentManager.beginTransaction().remove(youTubePlayerFragment).commitAllowingStateLoss()
         }
         super.onDestroy()
-//        youTubePlayer = null
     }
 
+    // Set different sizes of the youTubePlayerFragment according to the orientation of the phone
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         val currentOrientation = resources.configuration.orientation
@@ -78,6 +79,7 @@ class DetailFragment : Fragment() {
         }
     }
 
+    // Set the layout size
     private fun setLayoutSize(view: View, width: Int, height: Int) {
         val params = view.layoutParams
         params.width = width

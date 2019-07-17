@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 /**
- * Simple ViewModel factory that provides the MarsProperty and context to the ViewModel.
+ * Simple ViewModel factory that provides the Movie and context to the ViewModel.
  */
 class DetailViewModelFactory(
     private val movie: Movie,

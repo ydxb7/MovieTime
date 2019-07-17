@@ -1,14 +1,10 @@
 package ai.tomorrow.movietime.network
 
-import ai.tomorrow.movietime.database.DatabaseMoive
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
-import java.time.LocalDate
-import java.time.ZoneOffset
 
+// Define the Domain Movie class
 @Parcelize
 data class Movie(
     val id: Long,
@@ -34,11 +30,7 @@ data class Movie(
     var typeNow: Boolean = false
 ) : Parcelable
 
-
-
-
-
-
+// insert the video information get online, into the Domain Movie
 fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork) {
     videoId = videoNetwork.videoId
     videoKey = videoNetwork.key
@@ -49,8 +41,7 @@ fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork) {
 }
 
 
-// Define extension function NetworkVideoHolder.asDatabaseModel(),
-// that returns an array of <DatabaseVideo>.
+// Define extension function MoviePage.asDatabaseModel(), extract the movieList and transform them into Domain Movie model.
 fun MoviePage.asDomainModel(): List<Movie> {
     return results.map {
         Movie(
@@ -68,7 +59,7 @@ fun MoviePage.asDomainModel(): List<Movie> {
     }
 }
 
-
+// the data structure we get for MovieApi
 data class MoviePage(
     val page: Int,
     @Json(name = "total_results") val totalResults: Int,
@@ -76,6 +67,7 @@ data class MoviePage(
     val results: List<MovieNetwork>
 )
 
+// the Network movie we get inside of the MoviePage.results
 @Parcelize
 data class MovieNetwork(
     val id: Long,
@@ -94,15 +86,9 @@ data class MovieNetwork(
 
     val backdropPath: String?
         get() = _backdropPath?.substring(1) ?: null
-
-//    val releaseDate: Long?
-//        get() = dateToMilli(LocalDate.parse(_releaseDate))
 }
 
-//fun dateToMilli(date: LocalDate): Long{
-//    return date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
-//}
-
+// the Network video we get inside of the VideoResult.results
 data class VideoNetwork(
     @Json(name = "id") val videoId: String?,
     val key: String?,
@@ -112,16 +98,19 @@ data class VideoNetwork(
     val type: String?
 )
 
+// the video json class we get online
 data class VideoResult(
     @Json(name = "id") val movieId: Long,
     val results: List<VideoNetwork>
 )
 
+// the Genre of a movie
 data class Genre(
     @Json(name = "id") val genreId: Int,
     @Json(name = "name") val genreName: String
 )
 
+// the Network Genre information
 data class GenresNetwork(
     val genres: List<Genre>,
     val runtime: Int

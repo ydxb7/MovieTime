@@ -1,6 +1,6 @@
 package ai.tomorrow.movietime.overview
 
-import ai.tomorrow.movietime.databinding.GridViewItemBinding
+import ai.tomorrow.movietime.databinding.ListViewItemBinding
 import ai.tomorrow.movietime.network.Movie
 import ai.tomorrow.movietime.network.MovieNetwork
 import android.view.LayoutInflater
@@ -30,7 +30,7 @@ class MovieListAdapter( val onClickListener: OnClickListener ) :
      * The MarsPropertyViewHolder constructor takes the binding variable from the associated
      * GridViewItem, which nicely gives it access to the full [MarsProperty] information.
      */
-    class MovieViewHolder(private var binding: GridViewItemBinding):
+    class MovieViewHolder(private var binding: ListViewItemBinding):
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
             binding.movie = movie
@@ -49,7 +49,7 @@ class MovieListAdapter( val onClickListener: OnClickListener ) :
 
 
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = GridViewItemBinding.inflate(layoutInflater, parent, false)
+        val binding = ListViewItemBinding.inflate(layoutInflater, parent, false)
         return MovieViewHolder(binding)
     }
 

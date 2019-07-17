@@ -6,8 +6,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.bumptech.glide.load.engine.Resource
 
-val tableNames = listOf<String>( "popular", "top_rated", "upcoming", "now_playing")
-// Create the DatabaseEntities class, adding annotations for the class and the primary key.
 
 // Create the DatabaseEntities class, adding annotations for the class and the primary key.
 @Entity(primaryKeys = arrayOf("id", "typePopular", "typeRate", "typeUpcoming", "typeNow"))
@@ -36,7 +34,7 @@ data class DatabaseMoive constructor(
 )
 
 
-// Define extension function List<DatabaseVideo>.asDomainModel(), that returns a list of <Video>.
+// Define extension function List<Movie>.asDatabaseModel(), that returns a list of <DatabaseMoive>.
 fun List<Movie>.asDatabaseModel(): Array<DatabaseMoive> {
     return map {
         DatabaseMoive(
@@ -65,7 +63,7 @@ fun List<Movie>.asDatabaseModel(): Array<DatabaseMoive> {
     }.toTypedArray()
 }
 
-// Define extension function List<DatabaseVideo>.asDomainModel(), that returns a list of <Video>.
+// Define extension function List<DatabaseVideo>.asDomainModel(), that returns a list of <Movie>.
 fun List<DatabaseMoive>.asDomainModel(): List<Movie> {
     return map {
         Movie(

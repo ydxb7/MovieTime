@@ -42,6 +42,7 @@ class OverviewFragment(val sort: String) : Fragment() {
             viewModel.displayMovieDetails(it)
         })
 
+        // set the loading indicator, if only when there is no movie in the movieList, we show the loading indicator
         viewModel.movieList.observe(this, Observer {
             if (it.size == 0){
                 viewModel.status.value = MovieApiStatus.LOADING
@@ -50,11 +51,8 @@ class OverviewFragment(val sort: String) : Fragment() {
             }
         })
 
-//        val dividerItemDecoration = DividerItemDecoration(binding.postersGrid.getContext(), R.drawable.divider)
-////        val divider = ContextCompat.getDrawable(context!!, R.drawable.divider) as DividerItemDecoration
-//        binding.postersGrid.addItemDecoration(dividerItemDecoration)
 
-        // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
+        // Observe the navigateToSelectedMovie LiveData and Navigate when it isn't null
         // After navigating, call displayMovieDetailsComplete() so that the ViewModel is ready
         // for another navigation event.
         viewModel.navigateToSelectedMovie.observe(this, Observer {
@@ -66,12 +64,6 @@ class OverviewFragment(val sort: String) : Fragment() {
             }
         })
 
-
-
         return binding.root
     }
-
-
-
-
 }

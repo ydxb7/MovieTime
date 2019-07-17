@@ -22,20 +22,11 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+// My movie DB key
 const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
 
 private val MOVIE_LIST_URL = "https://api.themoviedb.org/"
 private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/"
-
-private const val BASE_URL = "https://mars.udacity.com/"
-
-enum class MovieApiSort(val value: String) {
-    POPULAR("popular"), TOP_TATED("top_rated"),
-    UPCOMING("upcoming"), NOW_PLAYING("now_playing")
-}
-
-//val movieSortList = listOf<String>("popular", "top_rated", "upcoming", "playing now")
-val movieSortList = listOf<String>( "popular", "top rated", "upcoming", "now playing")
 
 
 /**
@@ -59,23 +50,18 @@ private val retrofitMovie = Retrofit.Builder()
 
 
 /**
- * A public interface that exposes the [getProperties] method
+ * A public interface that exposes the [getMovieList], [getMovieDetail] methods
  */
 interface MovieApiService {
-    /**
-     * Returns a Coroutine [Deferred] [List] of [MovieNetwork] which can be fetched with await() if
-     * in a Coroutine scope.
-     * The @GET annotation indicates that the "primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22"
-     * endpoint will be requested with the GET HTTP method
-     */
+
+    // GET request to get the movie list on Web
     @GET("3/movie/{sort}")
     fun getMovieList(@Path("sort") sort: String, @Query("api_key") api_key: String):
-    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
             Call<MoviePage>
 
+    // GET request to get the movie detail on Web
     @GET("3/movie/{movieId}")
     fun getMovieDetail(@Path("movieId") movieId: String, @Query("api_key") api_key: String):
-    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
             Call<GenresNetwork>
 
 }
@@ -87,18 +73,29 @@ object MovieApi {
     val retrofitService: MovieApiService by lazy { retrofitMovie.create(MovieApiService::class.java) }
 }
 
+/**
+ * A public interface that exposes the [getVideoResults] method
+ */
 interface VideoApiService {
+    // GET request to get the video information on Web
     @GET("{movieId}/videos")
     fun getVideoResults(@Path("movieId") movieId: String, @Query("api_key") api_key: String):
             Call<VideoResult>
 }
 
+/**
+ * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
+ * object.
+ */
 private val retrofitVideo = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
 //    .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .baseUrl(VIDEO_RESULT_URL)
     .build()
 
+/**
+ * A public Api object that exposes the lazy-initialized Retrofit service
+ */
 object VideoApi {
     val retrofitService: VideoApiService by lazy { retrofitVideo.create(VideoApiService::class.java) }
 }
@@ -112,12 +109,15 @@ val coroutineScope = CoroutineScope(job + Dispatchers.IO)
 
 val mutex = Mutex()
 
-suspend fun fetchVideo(movieList: List<Movie>) {
+// fetch video information of each movie in the movieList
+fun fetchVideo(movieList: List<Movie>) {
     try {
         movieList.map {
             var getVideoResultsDeferred =
                 VideoApi.retrofitService.getVideoResults(it.id.toString(), BuildConfig.MovieDb_ApiKey)
+            // get video information on web
             val videoResults = getVideoResultsDeferred.execute().body()
+            // insert the video information into the Domain Movie object
             if (videoResults != null && videoResults.results.size > 0) {
                 it.insertNetworkVideo(videoResults.results[0])
                 it.hasVideo = true
@@ -166,11 +166,13 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
 
 
     try {
-        // this will run on a thread managed by Retrofit
+        // get the movies result
         val pageResult = getPropertiesDeferred.execute().body()
 
+        // extract the movieList
         val movieList = pageResult?.asDomainModel() ?: ArrayList()
 
+        // define the movie type for different sort
         when(movieType){
             "popular" -> movieList.map{ it.typePopular = true }
             "top rated" -> movieList.map{ it.typeRate = true }
@@ -180,13 +182,14 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
 
         Log.i("MovieApiService", "sort_by = " + movieType)
         Log.i("MovieApiService", "fetch movie list success!  ")
+
         mutex.withLock {
             fetchVideo(movieList)
         }
         return movieList
 
     } catch (e: Exception) {
-        Log.i("MovieApiService", "fetch movie list error!   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        Log.i("MovieApiService", "fetch movie list error! ")
         Log.i("MovieApiService", "" + e)
         return ArrayList()
     }
@@ -198,7 +201,9 @@ fun fetchMovieOnline(sort: String): Deferred<List<Movie>> {
     return result
 }
 
-suspend fun fetchGenre(movieId: Long): GenresNetwork?{
+
+// get the movie detail information from the movieId
+fun fetchGenre(movieId: Long): GenresNetwork?{
     val getVideoResultsDeferred = MovieApi.retrofitService.getMovieDetail(movieId = movieId.toString(), api_key = BuildConfig.MovieDb_ApiKey)
 
     try {

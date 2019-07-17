@@ -20,9 +20,6 @@ import kotlinx.coroutines.*
  *  [Movie].
  */
 
-private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
-
-//, YouTubePlayer.OnInitializedListener
 class DetailViewModel(val movie: Movie, app: Application) :
     AndroidViewModel(app) {
     /**
@@ -35,12 +32,13 @@ class DetailViewModel(val movie: Movie, app: Application) :
     // the Coroutine runs using the Main (UI) dispatcher
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    // the Genres information for movie passed to this fragment
     private val _genres = MutableLiveData<GenresNetwork>()
 
-    // The external immutable LiveData for the navigation property
     val genres: LiveData<GenresNetwork>
         get() = _genres
 
+    // reform the runtime from Int to String
     val runtimeString = Transformations.map(genres) { genres ->
         if(genres == null){
             "--"
@@ -61,6 +59,7 @@ class DetailViewModel(val movie: Movie, app: Application) :
         }
     }
 
+    // Reform the genres
     val genreString = Transformations.map(genres) { genres ->
         if(genres == null){
             ""
@@ -70,6 +69,7 @@ class DetailViewModel(val movie: Movie, app: Application) :
     }
 
     init {
+        // fetch Genres online
         getGenre(movie.id)
     }
 
@@ -79,6 +79,7 @@ class DetailViewModel(val movie: Movie, app: Application) :
         }
     }
 
+    // youtube initialize
     val onInitializedListener = object : YouTubePlayer.OnInitializedListener {
         override fun onInitializationSuccess(
             provider: YouTubePlayer.Provider,

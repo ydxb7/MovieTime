@@ -28,7 +28,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:listData="@{viewModel.movieList}"
                 tools:itemCount="16"
-                tools:listitem="@layout/grid_view_item" />
+                tools:listitem="@layout/list_view_item" />
 
         <ImageView
                 android:id="@+id/status_image"
