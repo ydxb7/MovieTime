@@ -5,9 +5,11 @@ import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentDetailBinding
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -34,6 +36,11 @@ class DetailFragment : Fragment() {
 
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
+
+//        val ratingBar = binding.ratingBar
+        binding.ratingBar.setNumStars(10)
+        binding.ratingBar.rating = movieProperty.voteAverage?.toFloat() ?: 0.toFloat()
+        binding.ratingBar.setIsIndicator(true)
 
 //        viewModel.getVideoResults()
         youTubePlayerFragment.setRetainInstance(true)
