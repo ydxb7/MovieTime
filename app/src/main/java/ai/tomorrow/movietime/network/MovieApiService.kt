@@ -100,13 +100,6 @@ object VideoApi {
     val retrofitService: VideoApiService by lazy { retrofitVideo.create(VideoApiService::class.java) }
 }
 
-
-// Create a Coroutine scope using a job to be able to cancel when needed
-val job = Job()
-
-// the Coroutine runs using the Main (UI) dispatcher
-val coroutineScope = CoroutineScope(job + Dispatchers.IO)
-
 val mutex = Mutex()
 
 // fetch video information of each movie in the movieList
@@ -195,13 +188,6 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
     }
 }
 
-
-fun fetchMovieOnline(sort: String): Deferred<List<Movie>> {
-    val result = coroutineScope.async { fetchMoviesList(sort) }
-    return result
-}
-
-
 // get the movie detail information from the movieId
 fun fetchGenre(movieId: Long): GenresNetwork?{
     val getVideoResultsDeferred = MovieApi.retrofitService.getMovieDetail(movieId = movieId.toString(), api_key = BuildConfig.MovieDb_ApiKey)
@@ -215,9 +201,4 @@ fun fetchGenre(movieId: Long): GenresNetwork?{
         Log.i("MovieApiService", "" + e)
         return null
     }
-}
-
-fun fetcGenreOnline(movieId: Long): Deferred<GenresNetwork?> {
-    val result = coroutineScope.async { fetchGenre(movieId) }
-    return result
 }

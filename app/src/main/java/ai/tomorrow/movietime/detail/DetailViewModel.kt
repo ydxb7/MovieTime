@@ -31,6 +31,7 @@ class DetailViewModel(val movie: Movie, app: Application) :
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val backgroundScope = CoroutineScope(viewModelJob + Dispatchers.IO)
 
     // the Genres information for movie passed to this fragment
     private val _genres = MutableLiveData<GenresNetwork>()
@@ -75,7 +76,8 @@ class DetailViewModel(val movie: Movie, app: Application) :
 
     fun getGenre(movieId: Long) {
         viewModelScope.launch {
-            _genres.value = fetcGenreOnline(movieId).await()
+            val getResult = backgroundScope.async { fetchGenre(movieId) }
+            _genres.value = getResult.await()
         }
     }
 

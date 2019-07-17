@@ -7,7 +7,9 @@ import ai.tomorrow.movietime.network.*
 import android.net.Network
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -45,7 +47,8 @@ class MoviesRepository(private val database: MoviesDatabase) {
         // This function uses the IO dispatcher to ensure the database insert database operation happens on the IO dispatcher.
         withContext(Dispatchers.IO) {
             // get the movieList with their video information online
-            val movieList = fetchMovieOnline(sort).await()
+            val getResult = async { fetchMoviesList(sort) }
+            val movieList = getResult.await()
             // remove the movie without a backdrop poster
             val movieList_withImage = movieList.filter { it.backdropPath != null }
             // insert the movieList into the database
@@ -53,6 +56,5 @@ class MoviesRepository(private val database: MoviesDatabase) {
         }
 
     }
-
 
 }
