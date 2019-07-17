@@ -73,25 +73,10 @@ interface MovieApiService {
     // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
             Call<MoviePage>
 
-//    @GET("3/discover/movie")
-//    fun getMovieDate(
-//        @Query("api_key") api_key: String,
-//        @Query("primary_release_date.gte") date1: String,
-//        @Query("primary_release_date.lte") date2: String,
-//        @Query("sort_by") sort_by: String
-//    ):
-//    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
-//            Call<MoviePage>
-//
-//    @GET("3/discover/movie")
-//    fun getMovieList(
-//        @Query("api_key") api_key: String,
-//        @Query("sort_by") sort_by: String,
-//        @Query("vote_count.gte") vote_count: Int
-//    ):
-//    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
-//            Call<MoviePage>
-
+    @GET("3/movie/{movieId}")
+    fun getMovieDetail(@Path("movieId") movieId: String, @Query("api_key") api_key: String):
+    // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
+            Call<GenresNetwork>
 
 }
 
@@ -153,12 +138,6 @@ suspend fun fetchVideo(movieList: List<Movie>) {
  */
 suspend fun fetchMoviesList(movieType: String): List<Movie> {
 
-//    val date_now = LocalDate.now()
-//    val date_plus20 = date_now.plusDays(20)
-//    val date_minus20 = date_now.minusDays(20)
-//    var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-
     var getPropertiesDeferred = when (movieType) {
         // Get the Deferred object for our Retrofit request
         "popular" -> MovieApi.retrofitService.getMovieList(
@@ -219,4 +198,21 @@ fun fetchMovieOnline(sort: String): Deferred<List<Movie>> {
     return result
 }
 
+suspend fun fetchGenre(movieId: Long): GenresNetwork?{
+    val getVideoResultsDeferred = MovieApi.retrofitService.getMovieDetail(movieId = movieId.toString(), api_key = BuildConfig.MovieDb_ApiKey)
 
+    try {
+        val genreResults = getVideoResultsDeferred.execute().body()
+        Log.i("MovieApiService", "fetch Genre correct")
+        return genreResults
+    } catch (e: Exception) {
+        Log.i("MovieApiService", "fetch Genre error")
+        Log.i("MovieApiService", "" + e)
+        return null
+    }
+}
+
+fun fetcGenreOnline(movieId: Long): Deferred<GenresNetwork?> {
+    val result = coroutineScope.async { fetchGenre(movieId) }
+    return result
+}

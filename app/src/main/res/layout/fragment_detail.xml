@@ -59,6 +59,17 @@
                     android:text="@{viewModel.movie.releaseDate}"
                     tools:text="2019-06-28" />
 
+            <!-- Runtime -->
+            <TextView
+                    android:id="@+id/movie_detail_activity_runtime_text_view_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="@{viewModel.runtimeString}"
+                    android:layout_gravity="end"
+                    android:textSize="18sp"/>
+
 
             <!-- Rating bar -->
             <RatingBar
@@ -74,6 +85,14 @@
                     android:secondaryProgressTint="@color/primaryColor"
                     style="@style/RatingBarStyle"/>
 
+            <!-- Genre -->
+            <TextView
+                    android:id="@+id/genre_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.genreString}"
+                    android:textSize="18sp"
+                    android:textStyle="italic"/>
 
             <!-- Overview -->
             <TextView

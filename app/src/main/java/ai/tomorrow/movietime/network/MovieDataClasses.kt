@@ -39,7 +39,6 @@ data class Movie(
 
 
 
-
 fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork) {
     videoId = videoNetwork.videoId
     videoKey = videoNetwork.key
@@ -118,3 +117,12 @@ data class VideoResult(
     val results: List<VideoNetwork>
 )
 
+data class Genre(
+    @Json(name = "id") val genreId: Int,
+    @Json(name = "name") val genreName: String
+)
+
+data class GenresNetwork(
+    val genres: List<Genre>,
+    val runtime: Int
+)
