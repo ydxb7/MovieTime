@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.youtube.player.YouTubePlayerFragment
 
@@ -20,12 +21,12 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
+//        val binding: ActivityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
+        val binding: ActivityDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.setLifecycleOwner(this)
 
-        Log.i("DetailActivity", "DetailActivityArgs.fromBundle(intent.extras).selectedMovie = " + DetailActivityArgs.fromBundle(intent.extras).selectedMovie)
         // The movie passed to this fragment
         val movie = DetailActivityArgs.fromBundle(intent.extras).selectedMovie
 
@@ -34,6 +35,7 @@ class DetailActivity : AppCompatActivity() {
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
 
+        Log.i("DetailActivity", "viewModel = " + viewModel)
         // Set the rating bar
         binding.ratingBar.setNumStars(10)
         binding.ratingBar.rating = movie.voteAverage?.toFloat() ?: 0.toFloat()
