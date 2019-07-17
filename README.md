@@ -1,4 +1,4 @@
-# Project 1 - *MovieTime*
+# *MovieTime*
 
 **MovieTime** shows the latest movies currently playing in theaters. The app utilizes the [Movie Database API](https://developers.themoviedb.org/3/movies/get-movie-details) to display images and basic information about these movies to the user.
 
@@ -49,8 +49,6 @@ Here's a walkthrough of implemented user stories:
 
 ![Video Walkthrough 1](show_MovieTime.gif)
 ![Video Walkthrough 2](show_MovieTime_grid.gif)
-
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Open-source libraries used
 
