@@ -15,7 +15,19 @@ import androidx.navigation.fragment.findNavController
 /**
  * This fragment shows the movies by different sort.
  */
-class OverviewFragment(val sort: String) : Fragment() {
+class OverviewFragment : Fragment() {
+
+    companion object{
+        private val SORT_TYPE = "sortType"
+
+        fun newInstance(sort: String): OverviewFragment {
+            val overviewFragment = OverviewFragment()
+            val args = Bundle()
+            args.putString(SORT_TYPE, sort)
+            overviewFragment.setArguments(args)
+            return overviewFragment
+        }
+    }
 
     /**
      * Inflates the layout with Data Binding, sets its lifecycle owner to the OverviewFragment
@@ -28,6 +40,9 @@ class OverviewFragment(val sort: String) : Fragment() {
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.setLifecycleOwner(this)
+
+        // Get sort type
+        val sort = arguments!!.getString(SORT_TYPE)
 
         // create ViewModel
         val viewModelFactory = OverviewViewModelFactory(sort, application)

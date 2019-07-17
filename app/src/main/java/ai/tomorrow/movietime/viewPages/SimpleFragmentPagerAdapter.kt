@@ -14,7 +14,7 @@ class SimpleFragmentPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm)
 
     // Each fragment to show in ViewPager
     override fun getItem(position: Int): Fragment {
-        return OverviewFragment(tabTitles[position])
+        return OverviewFragment.newInstance(tabTitles[position])
     }
 
     // Title for each ViewPager
