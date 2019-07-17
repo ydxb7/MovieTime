@@ -79,9 +79,9 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
     fun getMovieFromDatabase(sort: String): LiveData<List<Movie>>{
         return when(sort){
             "popular" -> moviesRepository.movies_popular
-            "top_rated" -> moviesRepository.movies_rate
+            "top rated" -> moviesRepository.movies_rate
             "upcoming" -> moviesRepository.movies_coming
-            "now_playing" -> moviesRepository.movies_now
+            "now playing" -> moviesRepository.movies_now
             else -> throw IllegalArgumentException("sort name wrong")
         }
     }
@@ -119,19 +119,5 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
         viewModelJob.cancel()
     }
 
-//    private class SortHolder {
-//        var currentValue: String? = null
-//            private set
-//
-//        fun update(changedSort: String, isChecked: Boolean): Boolean {
-//            if (isChecked) {
-//                currentValue = changedSort
-//                return true
-//            } else if (currentValue == changedSort) {
-//                currentValue = null
-//                return true
-//            }
-//            return false
-//        }
-//    }
+
 }

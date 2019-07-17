@@ -35,7 +35,7 @@ enum class MovieApiSort(val value: String) {
 }
 
 //val movieSortList = listOf<String>("popular", "top_rated", "upcoming", "playing now")
-val movieSortList = listOf<String>( "popular", "top_rated", "upcoming", "now_playing")
+val movieSortList = listOf<String>( "popular", "top rated", "upcoming", "now playing")
 
 
 /**
@@ -145,7 +145,7 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
             api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
         )
 
-        "top_rated" -> MovieApi.retrofitService.getMovieList(
+        "top rated" -> MovieApi.retrofitService.getMovieList(
             sort = "top_rated",
             api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
         )
@@ -155,7 +155,7 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
             api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
         )
 
-        "now_playing" -> MovieApi.retrofitService.getMovieList(
+        "now playing" -> MovieApi.retrofitService.getMovieList(
             sort = "now_playing",
             api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
         )
@@ -173,9 +173,9 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
 
         when(movieType){
             "popular" -> movieList.map{ it.typePopular = true }
-            "top_rated" -> movieList.map{ it.typeRate = true }
+            "top rated" -> movieList.map{ it.typeRate = true }
             "upcoming" -> movieList.map{ it.typeUpcoming = true }
-            "now_playing" -> movieList.map{ it.typeNow = true }
+            "now playing" -> movieList.map{ it.typeNow = true }
         }
 
         Log.i("MovieApiService", "sort_by = " + movieType)
