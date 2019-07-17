@@ -22,7 +22,7 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-private const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
+const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
 
 private val MOVIE_LIST_URL = "https://api.themoviedb.org/"
 private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/"
@@ -142,22 +142,22 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
         // Get the Deferred object for our Retrofit request
         "popular" -> MovieApi.retrofitService.getMovieList(
             sort = "popular",
-            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
+            api_key = movieDb_ApiKey
         )
 
         "top rated" -> MovieApi.retrofitService.getMovieList(
             sort = "top_rated",
-            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
+            api_key = movieDb_ApiKey
         )
 
         "upcoming" -> MovieApi.retrofitService.getMovieList(
             sort = "upcoming",
-            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
+            api_key = movieDb_ApiKey
         )
 
         "now playing" -> MovieApi.retrofitService.getMovieList(
             sort = "now_playing",
-            api_key = ai.tomorrow.movietime.overview.movieDb_ApiKey
+            api_key = movieDb_ApiKey
         )
 
         else -> throw IllegalArgumentException("movie type is wrong!")

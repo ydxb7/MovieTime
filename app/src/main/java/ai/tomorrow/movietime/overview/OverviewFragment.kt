@@ -1,24 +1,19 @@
 package ai.tomorrow.movietime.overview
 
-import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentOverviewBinding
 import ai.tomorrow.movietime.viewPages.ViewPagersFragmentDirections
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 
 
 /**
- * This fragment shows the the status of the Mars real-estate web services transaction.
+ * This fragment shows the movies by different sort.
  */
 class OverviewFragment(val sort: String) : Fragment() {
 
@@ -34,16 +29,17 @@ class OverviewFragment(val sort: String) : Fragment() {
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.setLifecycleOwner(this)
 
+        // create ViewModel
         val viewModelFactory = OverviewViewModelFactory(sort, application)
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(OverviewViewModel::class.java)
 
         // Giving the binding access to the OverviewViewModel
         binding.viewModel = viewModel
 
-        // Sets the adapter of the photosGrid RecyclerView with clickHandler lambda that
-        // tells the viewModel when our property is clicked
+        // Sets the adapter of the movieList RecyclerView with clickHandler lambda that
+        // tells the viewModel when our movie is clicked
         binding.postersGrid.adapter = MovieListAdapter(MovieListAdapter.OnClickListener {
-            viewModel.displayPropertyDetails(it)
+            viewModel.displayMovieDetails(it)
         })
 
         viewModel.movieList.observe(this, Observer {
@@ -59,14 +55,14 @@ class OverviewFragment(val sort: String) : Fragment() {
 //        binding.postersGrid.addItemDecoration(dividerItemDecoration)
 
         // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
-        // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
+        // After navigating, call displayMovieDetailsComplete() so that the ViewModel is ready
         // for another navigation event.
         viewModel.navigateToSelectedMovie.observe(this, Observer {
             if ( null != it ) {
                 // Must find the NavController from the Fragment
                 this.findNavController().navigate(ViewPagersFragmentDirections.actionViewPagersFragmentToDetailFragment(it))
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
-                viewModel.displayPropertyDetailsComplete()
+                viewModel.displayMovieDetailsComplete()
             }
         })
 

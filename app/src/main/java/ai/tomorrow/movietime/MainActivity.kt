@@ -15,19 +15,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-//        supportActionBar!!.setElevation(0F)
-
-
-
-
-
-
-
-
-        val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
-        Log.i("MainActivity", movieDb_ApiKey)
-
     }
 }

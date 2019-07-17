@@ -20,25 +20,17 @@ import kotlinx.coroutines.sync.withLock
 
 enum class MovieApiStatus { LOADING, ERROR, DONE }
 
-val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
-//val movieSortMap = mapOf("popular" to "popularity", "top_rated" to "vote_average")
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
 class OverviewViewModel(val sort: String, application: Application) : ViewModel() {
-//    private var sort = SortHolder()
 
-    // The internal MutableLiveData that stores the status of the most recent request
+    // status is used to show loading indicator
     val status = MutableLiveData<MovieApiStatus>()
 
-//    // The external immutable LiveData for the request status
-//    val status: LiveData<MovieApiStatus>
-//        get() = _status
-
-    // Internally, we use a MutableLiveData to handle navigation to the selected property
+    // handle navigation to the selected movie
     private val _navigateToSelectedMovie = MutableLiveData<Movie>()
 
-    // The external immutable LiveData for the navigation property
     val navigateToSelectedMovie: LiveData<Movie>
         get() = _navigateToSelectedMovie
 
@@ -52,30 +44,24 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
     // the Coroutine runs using the Main (UI) dispatcher
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    // Create a database variable and assign it to  getDatabase(), passing the application.
+    // get database
     private val database = getDatabase(application)
 
     // Define a moviesRepositor by calling the constructor and passing in the database.
     private val moviesRepository = MoviesRepository(database)
 
-    // Internally, we use a MutableLiveData to handle navigation to the selected property
-//    private val _movieList = MutableLiveData<List<Movie>>()
-
-    // The external immutable LiveData for the navigation property
+    // get movieList to show
     var movieList: LiveData<List<Movie>>
-//        get() = _movieList
 
-    // Create an init block and launch a coroutine to call videosRepository.refreshVideos().
     init {
-        // Get videos from the repository and assign it to a playlist variable.
-        Log.i("OverviewViewModel", "sort = " +  sort)
-
+        // Get movies from the repository and assign it to a movieList variable.
         movieList = getMovieFromDatabase(sort)
 
+        // download the latest movieList online and refresh the databse
         refreshDatabase(sort)
     }
 
-
+    // get the movieList in the databse
     fun getMovieFromDatabase(sort: String): LiveData<List<Movie>>{
         return when(sort){
             "popular" -> moviesRepository.movies_popular
@@ -86,26 +72,25 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
         }
     }
 
+    // download the latest movieList online and refresh the databse
     fun refreshDatabase(sort: String){
         viewModelScope.launch {
-            // 因为这是 suspend function，所以要用launch
             moviesRepository.refreshMovies(sort)
         }
     }
 
-
     /**
-     * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
-     * @param marsProperty The [MarsProperty] that was clicked on.
+     * When the movie is clicked, set the [_navigateToSelectedMovie] [MutableLiveData]
+     * @param movie The [Movie] that was clicked on.
      */
-    fun displayPropertyDetails(movie: Movie) {
+    fun displayMovieDetails(movie: Movie) {
         _navigateToSelectedMovie.value = movie
     }
 
     /**
-     * After the navigation has taken place, make sure navigateToSelectedProperty is set to null
+     * After the navigation has taken place, make sure navigateToSelectedMovie is set to null
      */
-    fun displayPropertyDetailsComplete() {
+    fun displayMovieDetailsComplete() {
         _navigateToSelectedMovie.value = null
     }
 
