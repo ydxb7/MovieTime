@@ -3,16 +3,13 @@ package ai.tomorrow.movietime.repository
 import ai.tomorrow.movietime.database.MoviesDatabase
 import ai.tomorrow.movietime.database.asDatabaseModel
 import ai.tomorrow.movietime.database.asDomainModel
-import ai.tomorrow.movietime.network.*
-import android.net.Network
+import ai.tomorrow.movietime.network.Movie
+import ai.tomorrow.movietime.network.fetchMoviesList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 // MoviesRepository class that takes a MoviesDatabase argument.
 // Repository for fetching movie data from the network and storing them on disk.
@@ -54,7 +51,5 @@ class MoviesRepository(private val database: MoviesDatabase) {
             // insert the movieList into the database
             database.movieDao.insertAll(*movieList_withImage.asDatabaseModel())
         }
-
     }
-
 }

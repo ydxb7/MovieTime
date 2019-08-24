@@ -9,25 +9,33 @@ import androidx.room.*
 @Dao
 interface MovieDao {
     // Add SQL @Query getMovies_popularity() function that returns a List of DatabaseMoive.
-    @Query("select * from databaseMoive " +
-            "WHERE typePopular == 1 " +
-            "ORDER BY popularity DESC LIMIT 20")
+    @Query(
+        "select * from databaseMoive " +
+                "WHERE typePopular == 1 " +
+                "ORDER BY popularity DESC LIMIT 20"
+    )
     fun getMovies_popularity(): LiveData<List<DatabaseMoive>>
 
     // Add SQL @Query getMovies_rate() function that returns a List of DatabaseMoive.
-    @Query("select * from databaseMoive " +
-            "WHERE typeRate == 1 " +
-            "ORDER BY voteAverage DESC LIMIT 20")
+    @Query(
+        "select * from databaseMoive " +
+                "WHERE typeRate == 1 " +
+                "ORDER BY voteAverage DESC LIMIT 20"
+    )
     fun getMovies_rate(): LiveData<List<DatabaseMoive>>
 
     // Add SQL @Query getMovies_now() function that returns a List of DatabaseMoive.
-    @Query("select * from databaseMoive " +
-            "WHERE typeNow == 1 " )
+    @Query(
+        "select * from databaseMoive " +
+                "WHERE typeNow == 1 "
+    )
     fun getMovies_now(): LiveData<List<DatabaseMoive>>
 
     // Add SQL @Query getMovies_coming() function that returns a List of DatabaseMoive.
-    @Query("select * from databaseMoive " +
-            "WHERE typeUpcoming == 1 " )
+    @Query(
+        "select * from databaseMoive " +
+                "WHERE typeUpcoming == 1 "
+    )
     fun getMovies_coming(): LiveData<List<DatabaseMoive>>
 
 
@@ -56,9 +64,11 @@ fun getDatabase(context: Context): MoviesDatabase {
     // check whether INSTANCE is initialized, and, if it isn’t, use DatabaseBuilder to create it.
     synchronized(MoviesDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
-            INSTANCE = Room.databaseBuilder(context.applicationContext,
+            INSTANCE = Room.databaseBuilder(
+                context.applicationContext,
                 MoviesDatabase::class.java,
-                "videos").build()
+                "videos"
+            ).build()
         }
     }
     return INSTANCE

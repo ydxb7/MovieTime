@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-val movieSortList = listOf<String>( "popular", "top rated", "upcoming", "now playing")
+val movieSortList = listOf<String>("popular", "top rated", "upcoming", "now playing")
 
 class SimpleFragmentPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getCount() = tabTitles.size

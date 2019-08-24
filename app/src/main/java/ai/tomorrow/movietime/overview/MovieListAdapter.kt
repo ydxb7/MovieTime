@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class MovieListAdapter( val onClickListener: OnClickListener ) :
+class MovieListAdapter(val onClickListener: OnClickListener) :
     ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(DiffCallback) {
 
     /**
@@ -30,7 +30,7 @@ class MovieListAdapter( val onClickListener: OnClickListener ) :
      * The MarsPropertyViewHolder constructor takes the binding variable from the associated
      * GridViewItem, which nicely gives it access to the full [MarsProperty] information.
      */
-    class MovieViewHolder(private var binding: ListViewItemBinding):
+    class MovieViewHolder(private var binding: ListViewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
             binding.movie = movie
@@ -43,11 +43,10 @@ class MovieListAdapter( val onClickListener: OnClickListener ) :
     /**
      * Create new [RecyclerView] item views (invoked by the layout manager)
      */
-    override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): MovieViewHolder {
-//        return MovieViewHolder(GridViewItemBinding.inflate(LayoutInflater.from(parent.context)))
-
-
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): MovieViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ListViewItemBinding.inflate(layoutInflater, parent, false)
         return MovieViewHolder(binding)

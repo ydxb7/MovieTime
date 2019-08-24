@@ -17,14 +17,14 @@ import androidx.navigation.fragment.findNavController
  */
 class OverviewFragment : Fragment() {
 
-    companion object{
+    companion object {
         private val SORT_TYPE = "sortType"
 
         fun newInstance(sort: String): OverviewFragment {
             val overviewFragment = OverviewFragment()
             val args = Bundle()
             args.putString(SORT_TYPE, sort)
-            overviewFragment.setArguments(args)
+            overviewFragment.arguments = args
             return overviewFragment
         }
     }
@@ -33,13 +33,15 @@ class OverviewFragment : Fragment() {
      * Inflates the layout with Data Binding, sets its lifecycle owner to the OverviewFragment
      * to enable Data Binding to observe LiveData, and sets up the RecyclerView with an adapter.
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val application = requireNotNull(activity).application
         val binding = FragmentOverviewBinding.inflate(inflater)
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         // Get sort type
         val sort = arguments!!.getString(SORT_TYPE)
@@ -59,9 +61,9 @@ class OverviewFragment : Fragment() {
 
         // set the loading indicator, if only when there is no movie in the movieList, we show the loading indicator
         viewModel.movieList.observe(this, Observer {
-            if (it.size == 0){
+            if (it.size == 0) {
                 viewModel.status.value = MovieApiStatus.LOADING
-            }else{
+            } else {
                 viewModel.status.value = MovieApiStatus.DONE
             }
         })
@@ -71,9 +73,10 @@ class OverviewFragment : Fragment() {
         // After navigating, call displayMovieDetailsComplete() so that the ViewModel is ready
         // for another navigation event.
         viewModel.navigateToSelectedMovie.observe(this, Observer {
-            if ( null != it ) {
+            if (null != it) {
                 // Must find the NavController from the Fragment
-                this.findNavController().navigate(ViewPagersFragmentDirections.actionViewPagersFragmentToDetailActivity(it))
+                this.findNavController()
+                    .navigate(ViewPagersFragmentDirections.actionViewPagersFragmentToDetailActivity(it))
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
                 viewModel.displayMovieDetailsComplete()
             }

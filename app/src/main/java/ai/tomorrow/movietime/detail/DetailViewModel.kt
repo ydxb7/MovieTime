@@ -1,15 +1,10 @@
 package ai.tomorrow.movietime.detail
 
-import ai.tomorrow.movietime.BuildConfig
-import ai.tomorrow.movietime.BuildConfig.MovieDb_ApiKey
-import ai.tomorrow.movietime.database.getDatabase
-import ai.tomorrow.movietime.network.*
-import ai.tomorrow.movietime.repository.MoviesRepository
+import ai.tomorrow.movietime.network.GenresNetwork
+import ai.tomorrow.movietime.network.Movie
+import ai.tomorrow.movietime.network.fetchGenre
 import android.app.Application
-import android.text.format.DateUtils
-import android.util.Log
 import androidx.lifecycle.*
-import com.bumptech.glide.Glide.init
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import kotlinx.coroutines.*
@@ -41,7 +36,7 @@ class DetailViewModel(val movie: Movie, app: Application) :
 
     // reform the runtime from Int to String
     val runtimeString = Transformations.map(genres) { genres ->
-        if(genres == null){
+        if (genres == null) {
             ""
         } else {
             // runtime
@@ -62,7 +57,7 @@ class DetailViewModel(val movie: Movie, app: Application) :
 
     // Reform the genres
     val genreString = Transformations.map(genres) { genres ->
-        if(genres == null){
+        if (genres == null) {
             ""
         } else {
             genres.genres.joinToString(" / ") { it.genreName }
@@ -104,6 +99,4 @@ class DetailViewModel(val movie: Movie, app: Application) :
 
         }
     }
-
-
 }

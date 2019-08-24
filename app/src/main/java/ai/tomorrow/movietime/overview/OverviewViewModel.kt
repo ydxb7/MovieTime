@@ -1,22 +1,16 @@
 package ai.tomorrow.movietime.overview
 
-import ai.tomorrow.movietime.BuildConfig
 import ai.tomorrow.movietime.database.getDatabase
-import ai.tomorrow.movietime.network.*
+import ai.tomorrow.movietime.network.Movie
 import ai.tomorrow.movietime.repository.MoviesRepository
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.async
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 enum class MovieApiStatus { LOADING, ERROR, DONE }
 
@@ -62,8 +56,8 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
     }
 
     // get the movieList in the databse
-    fun getMovieFromDatabase(sort: String): LiveData<List<Movie>>{
-        return when(sort){
+    fun getMovieFromDatabase(sort: String): LiveData<List<Movie>> {
+        return when (sort) {
             "popular" -> moviesRepository.movies_popular
             "top rated" -> moviesRepository.movies_rate
             "upcoming" -> moviesRepository.movies_coming
@@ -73,7 +67,7 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
     }
 
     // download the latest movieList online and refresh the databse
-    fun refreshDatabase(sort: String){
+    fun refreshDatabase(sort: String) {
         viewModelScope.launch {
             moviesRepository.refreshMovies(sort)
         }
@@ -94,7 +88,6 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
         _navigateToSelectedMovie.value = null
     }
 
-
     /**
      * When the [ViewModel] is finished, we cancel our coroutine [viewModelJob], which tells the
      * Retrofit service to stop.
@@ -103,6 +96,4 @@ class OverviewViewModel(val sort: String, application: Application) : ViewModel(
         super.onCleared()
         viewModelJob.cancel()
     }
-
-
 }

@@ -1,10 +1,8 @@
 package ai.tomorrow.movietime
 
 import ai.tomorrow.movietime.network.Movie
-import ai.tomorrow.movietime.network.MovieNetwork
 import ai.tomorrow.movietime.overview.MovieApiStatus
 import ai.tomorrow.movietime.overview.MovieListAdapter
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
@@ -13,9 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.youtube.player.YouTubePlayerFragment
 
-const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey;
+const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
 private val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/"
 
 /**
@@ -72,7 +69,6 @@ fun bindStatus(statusImageView: ImageView, status: MovieApiStatus?) {
     }
 }
 
-
 @BindingAdapter(value = *arrayOf("showImage", "imagePath"), requireAll = false)
 fun showImage(imageView: ImageView, hasVideo: Boolean, imagePath: String?) {
     if (hasVideo) {
@@ -96,12 +92,11 @@ fun showImage(imageView: ImageView, hasVideo: Boolean, imagePath: String?) {
     }
 }
 
-
 @BindingAdapter("showPlayIcon")
 fun showPlayIcon(imageView: ImageView, hasVideo: Boolean) {
-    if (hasVideo){
+    if (hasVideo) {
         imageView.visibility = View.VISIBLE
-    } else{
+    } else {
         imageView.visibility = View.GONE
     }
 }

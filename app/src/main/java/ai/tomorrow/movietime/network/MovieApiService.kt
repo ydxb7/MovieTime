@@ -2,13 +2,10 @@ package ai.tomorrow.movietime.network
 
 import ai.tomorrow.movietime.BuildConfig
 import ai.tomorrow.movietime.overview.MovieApiStatus
-import ai.tomorrow.movietime.overview.OverviewViewModel
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import retrofit2.Call
@@ -17,17 +14,12 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import java.lang.Exception
-import java.time.LocalDate
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 // My movie DB key
 const val movieDb_ApiKey = BuildConfig.MovieDb_ApiKey
 
 private val MOVIE_LIST_URL = "https://api.themoviedb.org/"
 private val VIDEO_RESULT_URL = "https://api.themoviedb.org/3/movie/"
-
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -47,7 +39,6 @@ private val retrofitMovie = Retrofit.Builder()
 //    .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .baseUrl(MOVIE_LIST_URL)
     .build()
-
 
 /**
  * A public interface that exposes the [getMovieList], [getMovieDetail] methods
@@ -123,7 +114,6 @@ fun fetchVideo(movieList: List<Movie>) {
     }
 }
 
-
 /**
  * Gets Movies property information from the Movie API Retrofit service and updates the
  * [MovieNetwork] [List] and [MovieApiStatus] [LiveData]. The Retrofit service returns a
@@ -154,9 +144,7 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
         )
 
         else -> throw IllegalArgumentException("movie type is wrong!")
-
     }
-
 
     try {
         // get the movies result
@@ -166,11 +154,11 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
         val movieList = pageResult?.asDomainModel() ?: ArrayList()
 
         // define the movie type for different sort
-        when(movieType){
-            "popular" -> movieList.map{ it.typePopular = true }
-            "top rated" -> movieList.map{ it.typeRate = true }
-            "upcoming" -> movieList.map{ it.typeUpcoming = true }
-            "now playing" -> movieList.map{ it.typeNow = true }
+        when (movieType) {
+            "popular" -> movieList.map { it.typePopular = true }
+            "top rated" -> movieList.map { it.typeRate = true }
+            "upcoming" -> movieList.map { it.typeUpcoming = true }
+            "now playing" -> movieList.map { it.typeNow = true }
         }
 
         Log.i("MovieApiService", "sort_by = " + movieType)
@@ -189,8 +177,9 @@ suspend fun fetchMoviesList(movieType: String): List<Movie> {
 }
 
 // get the movie detail information from the movieId
-fun fetchGenre(movieId: Long): GenresNetwork?{
-    val getVideoResultsDeferred = MovieApi.retrofitService.getMovieDetail(movieId = movieId.toString(), api_key = BuildConfig.MovieDb_ApiKey)
+fun fetchGenre(movieId: Long): GenresNetwork? {
+    val getVideoResultsDeferred =
+        MovieApi.retrofitService.getMovieDetail(movieId = movieId.toString(), api_key = BuildConfig.MovieDb_ApiKey)
 
     try {
         val genreResults = getVideoResultsDeferred.execute().body()

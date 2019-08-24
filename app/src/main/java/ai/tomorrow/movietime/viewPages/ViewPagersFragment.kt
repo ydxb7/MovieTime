@@ -1,8 +1,6 @@
 package ai.tomorrow.movietime.viewPages
 
-import ai.tomorrow.movietime.R
 import ai.tomorrow.movietime.databinding.FragmentViewPagersBinding
-import ai.tomorrow.movietime.viewPages.SimpleFragmentPagerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
-class ViewPagersFragment: Fragment() {
-//    lateinit var binding: FragmentViewPagersBinding
+class ViewPagersFragment : Fragment() {
+    //    lateinit var binding: FragmentViewPagersBinding
     lateinit var viewPager: ViewPager
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding = FragmentViewPagersBinding.inflate(inflater)
         viewPager = binding.viewpager
 
@@ -35,7 +35,7 @@ class ViewPagersFragment: Fragment() {
 
     private val onTabSelectedListener = object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(tab: TabLayout.Tab) {
-            viewPager.setCurrentItem(tab.getPosition())
+            viewPager.currentItem = tab.position
         }
 
         override fun onTabUnselected(tab: TabLayout.Tab) {

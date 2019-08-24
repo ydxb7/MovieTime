@@ -1,11 +1,7 @@
 package ai.tomorrow.movietime.database
 
 import ai.tomorrow.movietime.network.Movie
-import androidx.lifecycle.Transformations.map
 import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.bumptech.glide.load.engine.Resource
-
 
 // Create the DatabaseEntities class, adding annotations for the class and the primary key.
 @Entity(primaryKeys = arrayOf("id", "typePopular", "typeRate", "typeUpcoming", "typeNow"))
@@ -32,7 +28,6 @@ data class DatabaseMoive constructor(
     var typeUpcoming: Boolean = false,
     var typeNow: Boolean = false
 )
-
 
 // Define extension function List<Movie>.asDatabaseModel(), that returns a list of <DatabaseMoive>.
 fun List<Movie>.asDatabaseModel(): Array<DatabaseMoive> {

@@ -40,7 +40,6 @@ fun Movie.insertNetworkVideo(videoNetwork: VideoNetwork) {
     videoType = videoNetwork.type
 }
 
-
 // Define extension function MoviePage.asDatabaseModel(), extract the movieList and transform them into Domain Movie model.
 fun MoviePage.asDomainModel(): List<Movie> {
     return results.map {
